@@ -20,122 +20,129 @@ class Login extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.primaryColor, // Atencao cor pode mudar
       body: SafeArea( //Safe Area makes the UI avoid the corners and notch of the screen
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 50),
-            //logo
-            Image.asset(
-                'assets/images/OmniGuardian.jpg',
-              height: 100,
-              width: 100,
-            ),
-            const SizedBox(height: 50),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 30),
 
-            //Welcome back, you've been missed
-            Text('Welcome back, you\'ve been missed!',
-              style: TextStyle(
-                color: MyColors.textColorPrimary,
-                fontSize: 16
-              )
-            ),
+              //logo
+              Image.asset(
+                  'assets/images/OmniGuardian.jpg',
+                height: 100,
+                width: 100,
+              ),
 
-            const SizedBox(height: 25),
+              const SizedBox(height: 30),
+          
+              //Welcome back, you've been missed
+              Text('Welcome back, you\'ve been missed!',
+                style: TextStyle(
+                  color: MyColors.textColorPrimary,
+                  fontSize: 16
+                )
+              ),
+          
+              const SizedBox(height: 25),
+          
+              //username
+              MyTextField(
+                controller: usernameController,
+                hintText: 'Username',
+                obscureText: false,
+              ),
+          
+              const SizedBox(height: 10),
+          
+              //password
+              MyTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+              ),
+          
+              const SizedBox(height: 10),
+          
+              //forgot password
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+          
+              const SizedBox(height: 25),
+          
+              //sign in button
+              const MyButton(
+                onTap: sign
+              ),
+          
+              const SizedBox(height: 30),
+          
+              //or continue with
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.black,
+                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'Or continue with',
+                        style: TextStyle(color: Colors.grey[700])
+                      ),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          
+              const SizedBox(height: 20),
 
-            //username textfield
-            MyTextField(
-              controller: usernameController,
-              hintText: 'Username',
-              obscureText: false,
-            ),
-
-            const SizedBox(height: 10),
-
-            //password textfield
-            MyTextField(
-              controller: passwordController,
-              hintText: 'Password',
-              obscureText: true,
-            ),
-
-            const SizedBox(height: 10),
-
-            //forgot password
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              //google sign in
+              const SquareTile(imagePath: 'assets/images/google.png'),
+          
+              const SizedBox(height: 20),
+          
+              //not a member? register now
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: Colors.black),
+                    'Not a member?',
+                    style: TextStyle(color: Colors.grey[700])
                   ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            //sign in button
-            const MyButton(
-              onTap: sign
-            ),
-
-            const SizedBox(height: 30),
-
-            //or continue with
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
-                      ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      'Or continue with',
-                      style: TextStyle(color: Colors.grey[700])
-                    ),
-                  ),
-                  const Expanded(
-                    child: Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 30),
-            //google sign in
-            const SquareTile(imagePath: 'assets/images/google.png'),
-
-            const SizedBox(height: 30),
-
-            //not a member? register now
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Not a member?',
-                  style: TextStyle(color: Colors.grey[700])
-                ),
-                const SizedBox(width: 4),
-                const Text(
-                  'Register Now',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold
+                  const SizedBox(width: 4),
+                  const Text(
+                    'Register Now',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold
+                    )
                   )
-                )
-              ],
-            )
-          ],
+                ],
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

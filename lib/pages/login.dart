@@ -6,7 +6,8 @@ import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
 
 class Login extends StatefulWidget {
-  Login({super.key});
+  final Function()? onTap;
+  Login({super.key, required this.onTap});
 
   @override
   State<Login> createState() => _LoginState();
@@ -38,20 +39,27 @@ class _LoginState extends State<Login> {
       // pop the loading circle
       Navigator.pop(context);
 
-      wrongCredentialsMessage();
+      showErrorMessage(e.code);
     }
   }
 
-  void wrongCredentialsMessage() {
+  void showErrorMessage(String msg) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text('Credentials are incorrect')
-          );
-        },
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          title: Center(
+            child: Text(
+              msg,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +127,8 @@ class _LoginState extends State<Login> {
             
                 //sign in button
                 MyButton(
-                  onTap: signUserIn
+                  onTap: signUserIn,
+                  text: "Sign In",
                 ),
             
                 const SizedBox(height: 30),
@@ -155,7 +164,11 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 20),
             
                 //google sign in
-                const SquareTile(imagePath: 'assets/images/google.png'),
+                SquareTile(
+                  //onTap: () => AuthService().signInWithGoogle(),
+                  onTap: () => {},
+                  imagePath: 'assets/images/google.png'
+                ),
             
                 const SizedBox(height: 20),
             
@@ -168,12 +181,15 @@ class _LoginState extends State<Login> {
                       style: TextStyle(color: Colors.grey[700])
                     ),
                     const SizedBox(width: 4),
-                    const Text(
-                      'Register Now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold
-                      )
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: const Text(
+                        'Register Now',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold
+                        )
+                      ),
                     )
                   ],
                 ),

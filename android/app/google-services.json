@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "702885129367",
+    "project_id": "omniguardian-79658",
+    "storage_bucket": "omniguardian-79658.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702885129367:android:0102c6e5e578739723cdd2",
+        "android_client_info": {
+          "package_name": "com.example.omni_guardian"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbOybtQ0ouGNgIDCsjh1EMiAHEH8nP6co"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

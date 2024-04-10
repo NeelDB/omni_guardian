@@ -5,14 +5,12 @@ class MyTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
 
-  const MyTextField({
-    super.key,
+  const MyTextField({super.key,
     // Controls the text being edited
     //If user writes in there, we can this to access info
     required this.controller,
     required this.hintText,
-    required this.obscureText,
-
+    required this.obscureText
   });
 
   @override

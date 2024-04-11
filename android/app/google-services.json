@@ -12,7 +12,20 @@
           "package_name": "com.example.omni_guardian"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "702885129367-2aoc0gjrai014s2opee16bbm43ab6tf4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.omni_guardian",
+            "certificate_hash": "490dc94edabd5cc04b75ade9de5525fa0e36fcfb"
+          }
+        },
+        {
+          "client_id": "702885129367-rnkumnqq46ldh1lm8vmtjcdj2ggm37ag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAbOybtQ0ouGNgIDCsjh1EMiAHEH8nP6co"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702885129367-rnkumnqq46ldh1lm8vmtjcdj2ggm37ag.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

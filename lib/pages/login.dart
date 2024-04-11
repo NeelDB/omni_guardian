@@ -4,10 +4,11 @@ import 'package:omni_guardian/colors.dart';
 import 'package:omni_guardian/components/my_button.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   final Function()? onTap;
-  Login({super.key, required this.onTap});
+  const Login({super.key, required this.onTap});
 
   @override
   State<Login> createState() => _LoginState();
@@ -58,6 +59,39 @@ class _LoginState extends State<Login> {
         );
       },
     );
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if(googleUser == null) {
+      throw const NoGoogleAccountChosenException();
+    }
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future<void> authWithGoogle() async {
+    try {
+      await signInWithGoogle();
+    }
+    on NoGoogleAccountChosenException{
+      return;
+    }
+    catch(e) {
+      showErrorMessage('An unknown error occurred');
+    }
   }
 
 
@@ -166,7 +200,7 @@ class _LoginState extends State<Login> {
                 //google sign in
                 SquareTile(
                   //onTap: () => AuthService().signInWithGoogle(),
-                  onTap: () => {},
+                  onTap: authWithGoogle,
                   imagePath: 'assets/images/google.png'
                 ),
             
@@ -201,4 +235,8 @@ class _LoginState extends State<Login> {
         ),
     );
   }
+}
+
+class NoGoogleAccountChosenException implements Exception {
+  const NoGoogleAccountChosenException();
 }

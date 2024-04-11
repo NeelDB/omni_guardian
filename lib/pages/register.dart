@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omni_guardian/colors.dart';
 import 'package:omni_guardian/components/my_button.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
@@ -15,9 +16,11 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   // text editing controllers
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final domainController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   // sign user in method
   void signUserUp() async {
@@ -28,17 +31,9 @@ class _RegisterState extends State<Register> {
 
     // try creating the user
     try {
-      // check if password is confirmed
-      if(passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text
-        );
-      }
-      else {
-        // show error message, passwords don't match
-        showErrorMessage("Passwords don't match");
-      }
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text);
 
       // pop the loading circle
       Navigator.pop(context);
@@ -66,6 +61,39 @@ class _RegisterState extends State<Register> {
         );
       },
     );
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if(googleUser == null) {
+      throw const NoGoogleAccountChosenException();
+    }
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future<void> authWithGoogle() async {
+    try {
+      await signInWithGoogle();
+    }
+    on NoGoogleAccountChosenException{
+      return;
+    }
+    catch(e) {
+      showErrorMessage('An unknown error occurred');
+    }
   }
 
 
@@ -99,6 +127,33 @@ class _RegisterState extends State<Register> {
 
               const SizedBox(height: 25),
 
+              //First name
+              MyTextField(
+                controller: firstNameController,
+                hintText: 'First Name',
+                obscureText: false,
+              ),
+
+              const SizedBox(height: 10),
+
+              //Last name
+              MyTextField(
+                controller: lastNameController,
+                hintText: 'Last Name',
+                obscureText: false,
+              ),
+
+              const SizedBox(height: 10),
+
+              //Domain
+              MyTextField(
+                controller: domainController,
+                hintText: 'Domain',
+                obscureText: false,
+              ),
+
+              const SizedBox(height: 10),
+
               //email
               MyTextField(
                 controller: emailController,
@@ -115,16 +170,7 @@ class _RegisterState extends State<Register> {
                 obscureText: true,
               ),
 
-              const SizedBox(height: 10),
-
-              //confirm password
-              MyTextField(
-                controller: confirmPasswordController,
-                hintText: 'Confirm Password',
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 25),
+              const SizedBox(height: 30),
 
               //sign in button
               MyButton(
@@ -148,7 +194,7 @@ class _RegisterState extends State<Register> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
-                          'Or continue with',
+                          'Or register with',
                           style: TextStyle(color: Colors.grey[700])
                       ),
                     ),
@@ -167,7 +213,7 @@ class _RegisterState extends State<Register> {
               //google sign in
               SquareTile(
                   //onTap: () => AuthService().signInWithGoogle(),
-                  onTap: () => {},
+                  onTap: authWithGoogle,
 
                   imagePath: 'assets/images/google.png'
               ),
@@ -203,4 +249,8 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
+}
+
+class NoGoogleAccountChosenException implements Exception {
+  const NoGoogleAccountChosenException();
 }

@@ -71,4 +71,5 @@ class DefaultFirebaseOptions {
     authDomain: 'omniguardian-79658.firebaseapp.com',
     storageBucket: 'omniguardian-79658.appspot.com',
   );
+
 }

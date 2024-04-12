@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/colors.dart';
 import 'package:omni_guardian/components/my_button.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:omni_guardian/services/auth_service.dart';
 
 class Login extends StatefulWidget {
   final Function()? onTap;
@@ -18,82 +17,6 @@ class _LoginState extends State<Login> {
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  // sign user in method
-  void signUserIn() async {
-    // show loading circle
-    showDialog(context: context, builder: (context) {
-      return const Center(child: CircularProgressIndicator());
-    });
-    // try sign in
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text
-      );
-
-      // pop the loading circle
-      Navigator.pop(context);
-
-    } on FirebaseAuthException catch(e) {
-      // pop the loading circle
-      Navigator.pop(context);
-
-      showErrorMessage(e.code);
-    }
-  }
-
-  void showErrorMessage(String msg) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(
-              msg,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if(googleUser == null) {
-      throw const NoGoogleAccountChosenException();
-    }
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
-  Future<void> authWithGoogle() async {
-    try {
-      await signInWithGoogle();
-    }
-    on NoGoogleAccountChosenException{
-      return;
-    }
-    catch(e) {
-      showErrorMessage('An unknown error occurred');
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +84,8 @@ class _LoginState extends State<Login> {
             
                 //sign in button
                 MyButton(
-                  onTap: signUserIn,
+                  onTap: () => AuthService(context)
+                      .signUserIn(emailController.text, passwordController.text),
                   text: "Sign In",
                 ),
             
@@ -199,8 +123,7 @@ class _LoginState extends State<Login> {
             
                 //google sign in
                 SquareTile(
-                  //onTap: () => AuthService().signInWithGoogle(),
-                  onTap: authWithGoogle,
+                  onTap: () => AuthService(context).authWithGoogle(),
                   imagePath: 'assets/images/google.png'
                 ),
             
@@ -235,8 +158,4 @@ class _LoginState extends State<Login> {
         ),
     );
   }
-}
-
-class NoGoogleAccountChosenException implements Exception {
-  const NoGoogleAccountChosenException();
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/colors.dart';
 import 'package:omni_guardian/components/my_button.dart';
+import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
 import 'package:omni_guardian/services/auth_service.dart';
@@ -20,6 +21,7 @@ class _RegisterState extends State<Register> {
   final domainController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final domainCodeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +71,6 @@ class _RegisterState extends State<Register> {
 
               const SizedBox(height: 10),
 
-              //Domain
-              MyTextField(
-                controller: domainController,
-                hintText: 'Domain',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 10),
-
               //email
               MyTextField(
                 controller: emailController,
@@ -92,6 +85,24 @@ class _RegisterState extends State<Register> {
                 controller: passwordController,
                 hintText: 'Password',
                 obscureText: true,
+              ),
+
+              const SizedBox(height: 10),
+
+
+              //Domain
+              MyTextField(
+                controller: domainController,
+                hintText: 'Domain',
+                obscureText: false,
+              ),
+
+              const SizedBox(height: 10),
+
+              //Domain code
+              MyNumberField(
+                  controller: domainCodeController,
+                  hintText: 'Domain code'
               ),
 
               const SizedBox(height: 30),

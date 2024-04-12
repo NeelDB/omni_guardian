@@ -90,10 +90,8 @@ class AuthService {
     }
   }
 
-  // sign user out method
-  Future<void> signUserOut() async {
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
+  String? getUserEmail() {
+    return FirebaseAuth.instance.currentUser?.email;
   }
 }
 

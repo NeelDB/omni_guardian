@@ -89,6 +89,12 @@ class AuthService {
       showErrorMessage(e.toString());
     }
   }
+
+  // sign user out method
+  Future<void> signUserOut() async {
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
+  }
 }
 
 class NoGoogleAccountChosenException implements Exception {

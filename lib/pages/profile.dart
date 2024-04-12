@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class Profile extends StatelessWidget {
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        "Home",
+        "Profile",
         style: TextStyle(fontSize: 50),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../components/my_dropdown.dart';
+import '../../../components/my_halft_textfield.dart';
 import '../../../components/my_numberfield.dart';
 import '../../../components/my_textfield.dart';
 
@@ -30,20 +31,30 @@ class RegisterForm extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
         children: [
-          //First name
-          MyTextField(
-            controller: firstNameController,
-            labelText: 'First Name',
-            obscureText: false,
-          ),
+          // First name and Last Name
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //First name
+              MyHalfTextfield(
+                isLeft: true,
+                inputField: MyTextField(
+                  controller: firstNameController,
+                  labelText: 'First Name',
+                  obscureText: false,
+                ),
+              ),
 
-          const SizedBox(height: 15),
-
-          //Last name
-          MyTextField(
-            controller: lastNameController,
-            labelText: 'Last Name',
-            obscureText: false,
+              //Last name
+              MyHalfTextfield(
+                isLeft: false,
+                inputField: MyTextField(
+                  controller: lastNameController,
+                  labelText: 'Last Name',
+                  obscureText: false,
+                ),
+              ),
+            ],
           ),
 
           const SizedBox(height: 15),
@@ -66,34 +77,56 @@ class RegisterForm extends StatelessWidget {
 
           const SizedBox(height: 15),
 
+          // Domain name and Admin code
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //Domain name
+              MyHalfTextfield(
+                isLeft: true,
+                inputField:
+                  MyTextField(
+                    controller: domainController,
+                    labelText: 'Domain',
+                    obscureText: false,
+                  ),
+              ),
 
-          //Domain
-          MyTextField(
-            controller: domainController,
-            labelText: 'Domain',
-            obscureText: false,
+              //Alarm code
+              MyHalfTextfield(
+                isLeft: false,
+                inputField:
+                  MyNumberField(
+                      controller: alarmCodeController,
+                      labelText: 'Alarm code'
+                  ),
+              ),
+            ],
           ),
 
           const SizedBox(height: 15),
 
-          //Domain code
-          MyNumberField(
-              controller: alarmCodeController,
-              labelText: 'Alarm code'
-          ),
+          // Select Role and Guest Code
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //Select Role -> Admin or Guest
+              const MyHalfTextfield(
+                isLeft: true,
+                inputField:  MyDropdown(),
+              ),
 
-          const SizedBox(height: 15),
-
-          //Select Role -> Admin or Guest
-          const MyDropdown(),
-
-          const SizedBox(height: 15),
-
-          //Guest Code
-          MyNumberField(
-              controller: guestCodeController,
-              labelText: 'Guest code'
-          ),
+              //Guest Code
+              MyHalfTextfield(
+                isLeft: false,
+                inputField:
+                  MyNumberField(
+                      controller: guestCodeController,
+                      labelText: 'Guest code'
+                  ),
+              ),
+            ],
+          )
         ],
       ),
     );

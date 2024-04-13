@@ -79,7 +79,7 @@ class _RegisterState extends State<Register> {
 
               const SizedBox(height: 30),
 
-              //or continue with
+              //or register with
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(

@@ -14,29 +14,24 @@ class _MyDropdownState extends State<MyDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child:
-      DropdownButtonFormField<String>(
-        decoration: const InputDecoration(
-          labelText: 'Register as',
-          border: OutlineInputBorder(),
-          filled: true
-        ),
-        items: ['Admin', 'Guest']
-            .map((String value) => DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ))
-            .toList(),
-        onChanged: (value) {
-          dropdownValue = value!;
-        },
-        onSaved: (value) {
-          dropdownValue = value!;
-        }
+    return DropdownButtonFormField<String>(
+      decoration: const InputDecoration(
+        labelText: 'Register as',
+        border: OutlineInputBorder(),
+        filled: true
       ),
-
+      items: ['Admin', 'Guest']
+          .map((String value) => DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      ))
+          .toList(),
+      onChanged: (value) {
+        dropdownValue = value!;
+      },
+      onSaved: (value) {
+        dropdownValue = value!;
+      }
     );
   }
 

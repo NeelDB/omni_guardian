@@ -7,6 +7,8 @@ import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 
+import 'components/register_form.dart';
+
 class Register extends StatefulWidget {
   final Function()? onTap;
   const Register({super.key, required this.onTap});
@@ -55,71 +57,16 @@ class _RegisterState extends State<Register> {
 
               const SizedBox(height: 25),
 
-              //First name
-              MyTextField(
-                controller: firstNameController,
-                labelText: 'First Name',
-                obscureText: false,
+              // Form to register user
+              RegisterForm(
+                  firstNameController: firstNameController,
+                  lastNameController: lastNameController,
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  domainController: domainController,
+                  alarmCodeController: alarmCodeController,
+                  guestCodeController: guestCodeController
               ),
-
-              const SizedBox(height: 15),
-
-              //Last name
-              MyTextField(
-                controller: lastNameController,
-                labelText: 'Last Name',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 15),
-
-              //email
-              MyTextField(
-                controller: emailController,
-                labelText: 'Email',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 15),
-
-              //password
-              MyTextField(
-                controller: passwordController,
-                labelText: 'Password',
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 15),
-
-
-              //Domain
-              MyTextField(
-                controller: domainController,
-                labelText: 'Domain',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 15),
-
-              //Domain code
-              MyNumberField(
-                  controller: alarmCodeController,
-                  labelText: 'Alarm code'
-              ),
-
-              const SizedBox(height: 15),
-
-              //Select Role -> Admin or Guest
-              const MyDropdown(),
-
-              const SizedBox(height: 15),
-
-              //Guest Code
-              MyNumberField(
-                  controller: guestCodeController,
-                  labelText: 'Guest code'
-              ),
-
 
               const SizedBox(height: 30),
 

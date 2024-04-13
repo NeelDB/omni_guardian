@@ -47,21 +47,28 @@ class _LoginState extends State<Login> {
                 ),
             
                 const SizedBox(height: 25),
-            
-                //email
-                MyTextField(
-                  controller: emailController,
-                  labelText: 'Email',
-                  obscureText: false,
-                ),
-            
-                const SizedBox(height: 10),
-            
-                //password
-                MyTextField(
-                  controller: passwordController,
-                  labelText: 'Password',
-                  obscureText: true,
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Column(
+                    children: [
+                      //email
+                      MyTextField(
+                        controller: emailController,
+                        labelText: 'Email',
+                        obscureText: false,
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      //password
+                      MyTextField(
+                        controller: passwordController,
+                        labelText: 'Password',
+                        obscureText: true,
+                      ),
+                    ],
+                  ),
                 ),
             
                 const SizedBox(height: 10),

@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
-/*class MyRow extends StatelessWidget {
-
-  final Widget leftWidget;
-  final Widget rightWidget;
-
+class MyRow extends StatelessWidget {
   const MyRow({
     super.key,
     required this.leftWidget,
-    required this.rightWidget
-})
+    required this.rightWidget,
+  });
+
+  final Widget leftWidget;
+  final Widget rightWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +17,19 @@ import 'package:flutter/cupertino.dart';
       children: [
         //Left Widget
         MyHalfTextfield(
-            isLeft: true, inputField: leftWidget
+            isLeft: true,
+            inputField: leftWidget
         ),
+
         //Right Widget
         MyHalfTextfield(
-            isLeft: false, inputField: rightWidget
-        )
-      ],
+            isLeft: false,
+            inputField: rightWidget
+        ),
+      ]
     );
   }
-}*/
+}
 
 
 class MyHalfTextfield extends StatelessWidget {

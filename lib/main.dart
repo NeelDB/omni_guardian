@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/pages/auth_page.dart';
-import 'package:omni_guardian/pages/login.dart';
+import 'package:omni_guardian/pages/login/login.dart';
 import 'colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';

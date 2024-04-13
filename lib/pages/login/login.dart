@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
                 //email
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Email',
+                  labelText: 'Email',
                   obscureText: false,
                 ),
             
@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                 //password
                 MyTextField(
                   controller: passwordController,
-                  hintText: 'Password',
+                  labelText: 'Password',
                   obscureText: true,
                 ),
             

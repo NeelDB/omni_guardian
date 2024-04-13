@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/colors.dart';
 import 'package:omni_guardian/components/my_button.dart';
+import 'package:omni_guardian/components/my_dropdown.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
@@ -21,7 +22,8 @@ class _RegisterState extends State<Register> {
   final domainController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final domainCodeController = TextEditingController();
+  final alarmCodeController = TextEditingController();
+  final guestCodeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,54 +58,68 @@ class _RegisterState extends State<Register> {
               //First name
               MyTextField(
                 controller: firstNameController,
-                hintText: 'First Name',
+                labelText: 'First Name',
                 obscureText: false,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               //Last name
               MyTextField(
                 controller: lastNameController,
-                hintText: 'Last Name',
+                labelText: 'Last Name',
                 obscureText: false,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               //email
               MyTextField(
                 controller: emailController,
-                hintText: 'Email',
+                labelText: 'Email',
                 obscureText: false,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               //password
               MyTextField(
                 controller: passwordController,
-                hintText: 'Password',
+                labelText: 'Password',
                 obscureText: true,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
 
               //Domain
               MyTextField(
                 controller: domainController,
-                hintText: 'Domain',
+                labelText: 'Domain',
                 obscureText: false,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               //Domain code
               MyNumberField(
-                  controller: domainCodeController,
-                  hintText: 'Domain code'
+                  controller: alarmCodeController,
+                  labelText: 'Alarm code'
               ),
+
+              const SizedBox(height: 15),
+
+              //Select Role -> Admin or Guest
+              const MyDropdown(),
+
+              const SizedBox(height: 15),
+
+              //Guest Code
+              MyNumberField(
+                  controller: guestCodeController,
+                  labelText: 'Guest code'
+              ),
+
 
               const SizedBox(height: 30),
 

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
   final controller;
-  final String hintText;
+  final String labelText;
   final bool obscureText;
 
   const MyTextField({super.key,
     // Controls the text being edited
     //If user writes in there, we can this to access info
     required this.controller,
-    required this.hintText,
+    required this.labelText,
     required this.obscureText
   });
 
@@ -29,7 +29,7 @@ class MyTextField extends StatelessWidget {
           ),
           fillColor: Colors.grey.shade200,
           filled: true,
-          hintText: hintText
+          labelText: labelText
         ),
       ),
     );

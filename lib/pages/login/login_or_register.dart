@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:omni_guardian/pages/login/login.dart';
 import 'package:omni_guardian/pages/login/register.dart';
+
+import 'login.dart';
+
 
 class LoginOrRegister extends StatefulWidget {
   const LoginOrRegister({super.key});

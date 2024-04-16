@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/colors.dart';
 import 'package:omni_guardian/components/my_button.dart';
-import 'package:omni_guardian/components/my_dropdown.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 
-import 'components/register_form.dart';
+import '../../components/my_halft_textfield.dart';
 
 class Register extends StatefulWidget {
   final Function()? onTap;
@@ -19,14 +18,17 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   // text editing controllers
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final domainController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final alarmCodeController = TextEditingController();
-  final guestCodeController = TextEditingController();
-  final nCamerasController = TextEditingController();
+  final String firstName = '';
+  final String lastName = '';
+  final String domain = '';
+  final String email = '';
+  final String password = '';
+  final String alarmCode = '';
+  final String guestCode = '';
+  final String nCameras = '';
+  bool isAdmin = false;
+
+  String? selectedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -59,23 +61,121 @@ class _RegisterState extends State<Register> {
               const SizedBox(height: 25),
 
               // Form to register user
-              RegisterForm(
-                firstNameController: firstNameController,
-                lastNameController: lastNameController,
-                emailController: emailController,
-                passwordController: passwordController,
-                domainController: domainController,
-                alarmCodeController: alarmCodeController,
-                guestCodeController: guestCodeController,
-                nCamerasController: nCamerasController,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Column(
+                  children: [
+                    MyRow(
+                      leftWidget: //email
+                      MyTextField(
+                        text: firstName,
+                        labelText: 'First Name',
+                        obscureText: false,
+                      ),
+                      rightWidget:
+                      MyTextField(
+                        text: lastName,
+                        labelText: 'Last Name',
+                        obscureText: false,
+                      ),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    //email
+                    MyTextField(
+                      text: email,
+                      labelText: 'Email',
+                      obscureText: false,
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    //password
+                    MyTextField(
+                      text: password,
+                      labelText: 'Password',
+                      obscureText: true,
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    //Domain
+                    MyTextField(
+                      text: domain,
+                      labelText: 'Domain',
+                      obscureText: false,
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    //Select between Admin or Guest
+                    DropdownButtonFormField<String>(
+                      value: selectedRole,
+                      hint: const Text('Select Role'),
+                      decoration: const InputDecoration(
+                          labelText: 'Register as',
+                          border: OutlineInputBorder(),
+                          filled: true
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          if(value == 'Admin') {
+                            isAdmin = true;
+                          }
+                          else {
+                            isAdmin = false;
+                          }
+                        });
+                      },
+                      items: ['Admin', 'Guest'].map((role) {
+                        return DropdownMenuItem<String>(
+                          value: role,
+                          child: Text(role),
+                        );
+                      }).toList(),
+                    ),
+                    Visibility(
+                      visible: isAdmin,
+                      child: Column(
+                        children: [
+
+                          const SizedBox(height: 15),
+
+                          //Alarm code
+                          MyNumberField(
+                              number: alarmCode,
+                              labelText: 'Alarm code'
+                          ),
+
+                          const SizedBox(height: 15),
+
+                          //Number of cameras
+                          MyNumberField(
+                              number: nCameras,
+                              labelText: 'Number of cameras'
+                          )
+                        ],
+                        // Add your logic for admin input handling
+                      ),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    MyNumberField(
+                        number: guestCode,
+                        labelText: 'Guest code'
+                    )
+                  ],
+                ),
               ),
 
               const SizedBox(height: 30),
 
-              //sign up
+              //sign in button
               MyButton(
                 onTap: () => AuthService(context)
-                    .createUser(emailController.text, passwordController.text),
+                    .createUser(email ,password),
                 text: "Sign Up",
               ),
 

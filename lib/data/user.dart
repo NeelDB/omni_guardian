@@ -8,6 +8,7 @@ class User {
   String alarmCode;
   bool isAdmin;
   String authorizationToken;
+  String password;
 
   User(
       this.firstName,
@@ -18,7 +19,8 @@ class User {
       this.guestCode,
       this.alarmCode,
       this.isAdmin,
-      this.authorizationToken
+      this.authorizationToken,
+      this.password
       );
 
 
@@ -32,7 +34,8 @@ class User {
       'guestCode' : guestCode,
       'alarmCode' : alarmCode,
       'isAdmin' : isAdmin,
-      'authorizationToken' : authorizationToken
+      'authorizationToken' : authorizationToken,
+      'password' : password
     };
   }
 }

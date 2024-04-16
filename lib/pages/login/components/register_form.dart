@@ -15,6 +15,7 @@ class RegisterForm extends StatelessWidget {
     required this.domainController,
     required this.alarmCodeController,
     required this.guestCodeController,
+    required this.nCamerasController
   });
 
   final TextEditingController firstNameController;
@@ -24,6 +25,7 @@ class RegisterForm extends StatelessWidget {
   final TextEditingController domainController;
   final TextEditingController alarmCodeController;
   final TextEditingController guestCodeController;
+  final TextEditingController nCamerasController;
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +36,17 @@ class RegisterForm extends StatelessWidget {
           // First name and Last Name
           MyRow(
             leftWidget: //email
-              MyTextField(
-                controller: firstNameController,
-                labelText: 'First Name',
-                obscureText: false,
-              ),
+            MyTextField(
+              controller: firstNameController,
+              labelText: 'First Name',
+              obscureText: false,
+            ),
             rightWidget:
-              MyTextField(
-                controller: lastNameController,
-                labelText: 'Last Name',
-                obscureText: false,
-              ),
+            MyTextField(
+              controller: lastNameController,
+              labelText: 'Last Name',
+              obscureText: false,
+            ),
           ),
 
           const SizedBox(height: 15),
@@ -67,34 +69,25 @@ class RegisterForm extends StatelessWidget {
 
           const SizedBox(height: 15),
 
-          MyRow(
-              leftWidget:
-                MyTextField(
-                  controller: domainController,
-                  labelText: 'Domain',
-                  obscureText: false,
-                ),
-              rightWidget:
-                MyNumberField(
-                  controller: alarmCodeController,
-                  labelText: 'Alarm code'
-              )
+          //Domain
+          MyTextField(
+            controller: domainController,
+            labelText: 'Domain',
+            obscureText: false,
           ),
-
 
           const SizedBox(height: 15),
 
-          MyRow(
-              leftWidget:
-                const MyHalfTextfield(
-                  isLeft: true,
-                  inputField:  MyDropdown(),
-                ),
-              rightWidget:
-                MyNumberField(
-                    controller: guestCodeController,
-                    labelText: 'Guest code'
-                )
+          MyDropdown(
+            alarmCodeController: alarmCodeController,
+            nCamerasController: nCamerasController,
+          ),
+
+          const SizedBox(height: 15),
+
+          MyNumberField(
+              controller: guestCodeController,
+              labelText: 'Guest code'
           )
         ],
       ),

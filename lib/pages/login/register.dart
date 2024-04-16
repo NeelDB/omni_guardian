@@ -26,6 +26,7 @@ class _RegisterState extends State<Register> {
   final passwordController = TextEditingController();
   final alarmCodeController = TextEditingController();
   final guestCodeController = TextEditingController();
+  final nCamerasController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,18 +60,19 @@ class _RegisterState extends State<Register> {
 
               // Form to register user
               RegisterForm(
-                  firstNameController: firstNameController,
-                  lastNameController: lastNameController,
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  domainController: domainController,
-                  alarmCodeController: alarmCodeController,
-                  guestCodeController: guestCodeController
+                firstNameController: firstNameController,
+                lastNameController: lastNameController,
+                emailController: emailController,
+                passwordController: passwordController,
+                domainController: domainController,
+                alarmCodeController: alarmCodeController,
+                guestCodeController: guestCodeController,
+                nCamerasController: nCamerasController,
               ),
 
               const SizedBox(height: 30),
 
-              //sign in button
+              //sign up
               MyButton(
                 onTap: () => AuthService(context)
                     .createUser(emailController.text, passwordController.text),

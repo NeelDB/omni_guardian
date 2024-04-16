@@ -57,7 +57,7 @@ class Requests {
       debugPrint("Conflict: Domain already exists!");
 
     } else {
-      debugPrint(response.statusCode as String?);
+      print(response.statusCode);
     }
 
     return null;

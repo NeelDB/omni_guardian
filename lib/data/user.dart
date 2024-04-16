@@ -1,6 +1,6 @@
 class User {
-  String firstName;
-  String lastName;
+  String firstname;
+  String lastname;
   String email;
   String ip;
   String domain;
@@ -11,8 +11,8 @@ class User {
   String password;
 
   User(
-      this.firstName,
-      this.lastName,
+      this.firstname,
+      this.lastname,
       this.email,
       this.ip,
       this.domain,
@@ -26,8 +26,8 @@ class User {
 
   Map<String, dynamic> toJson() {
     return {
-      'firstName' : firstName,
-      'lastName' : lastName,
+      'firstname' : firstname,
+      'lastname' : lastname,
       'email' : email,
       'ip' : ip,
       'domain' : domain,

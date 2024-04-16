@@ -21,14 +21,14 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   // text editing controllers
-  final String firstName = 'default firstName';
-  final String lastName = 'default lastName';
-  final String domain = 'default domain';
-  final String email = 'default email';
-  final String password = 'default password';
-  final String alarmCode = 'default alarmCode';
-  final String guestCode = 'default guestCode';
-  final String nCameras = 'default nCameras';
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final domain = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final alarmCode = TextEditingController();
+  final guestCode = TextEditingController();
+  final nCameras = TextEditingController();
   bool isAdmin = true;
   final String address = "default address";
 
@@ -72,13 +72,13 @@ class _RegisterState extends State<Register> {
                     MyRow(
                       leftWidget: //email
                       MyTextField(
-                        text: firstName,
+                        controller: firstName,
                         labelText: 'First Name',
                         obscureText: false,
                       ),
                       rightWidget:
                       MyTextField(
-                        text: lastName,
+                        controller: lastName,
                         labelText: 'Last Name',
                         obscureText: false,
                       ),
@@ -88,7 +88,7 @@ class _RegisterState extends State<Register> {
 
                     //email
                     MyTextField(
-                      text: email,
+                      controller: email,
                       labelText: 'Email',
                       obscureText: false,
                     ),
@@ -97,7 +97,7 @@ class _RegisterState extends State<Register> {
 
                     //password
                     MyTextField(
-                      text: password,
+                      controller: password,
                       labelText: 'Password',
                       obscureText: true,
                     ),
@@ -106,7 +106,7 @@ class _RegisterState extends State<Register> {
 
                     //Domain
                     MyTextField(
-                      text: domain,
+                      controller: domain,
                       labelText: 'Domain',
                       obscureText: false,
                     ),
@@ -148,7 +148,7 @@ class _RegisterState extends State<Register> {
 
                           //Alarm code
                           MyNumberField(
-                              number: alarmCode,
+                              controller: alarmCode,
                               labelText: 'Alarm code'
                           ),
 
@@ -156,7 +156,7 @@ class _RegisterState extends State<Register> {
 
                           //Number of cameras
                           MyNumberField(
-                              number: nCameras,
+                              controller: nCameras,
                               labelText: 'Number of cameras'
                           )
                         ],
@@ -167,7 +167,7 @@ class _RegisterState extends State<Register> {
                     const SizedBox(height: 15),
 
                     MyNumberField(
-                        number: guestCode,
+                        controller: guestCode,
                         labelText: 'Guest code'
                     )
                   ],
@@ -179,7 +179,7 @@ class _RegisterState extends State<Register> {
               //sign up button
               MyButton(
                 onTap: () => AuthService(context)
-                    .createUser(firstName, lastName, email, domain, guestCode, alarmCode, isAdmin, password, nCameras, address),
+                    .createUser(firstName.text, lastName.text, email.text, domain.text, guestCode.text, alarmCode.text, isAdmin, password.text, nCameras.text, address),
                 text: "Sign Up",
               ),
 

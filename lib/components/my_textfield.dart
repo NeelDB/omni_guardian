@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
-  String text;
+  TextEditingController controller;
   final String labelText;
   final bool obscureText;
 
   MyTextField({super.key,
     // Controls the text being edited
     //If user writes in there, we can this to access info
-    required this.text,
+    required this.controller,
     required this.labelText,
     required this.obscureText
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
@@ -27,16 +28,7 @@ class MyTextField extends StatelessWidget {
           fillColor: Colors.grey.shade200,
           filled: true,
           labelText: labelText
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please fill this box';
-        }
-        return null;
-      },
-      onSaved: (value) {
-        text = value!; // Save the value when the form is saved
-      },
+      )
     );
   }
 }

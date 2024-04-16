@@ -15,8 +15,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   // text editing controllers
-  final String emailController = '';
-  final String passwordController = '';
+  final emailController = TextEditingController();
+  final password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +54,16 @@ class _LoginState extends State<Login> {
                   children: [
                     //email
                     MyTextField(
-                      text: emailController,
+                      controller: emailController,
                       labelText: 'Email',
-                      obscureText: false,
+                      obscureText: false
                     ),
 
                     const SizedBox(height: 15),
 
                     //password
                     MyTextField(
-                      text: passwordController,
+                      controller: password,
                       labelText: 'Password',
                       obscureText: true,
                     ),
@@ -92,7 +92,7 @@ class _LoginState extends State<Login> {
               //sign in button
               MyButton(
                 onTap: () => AuthService(context)
-                    .signUserIn(emailController, passwordController),
+                    .signUserIn(emailController.text, password.text),
                 text: "Sign In",
               ),
 

@@ -9,48 +9,51 @@ import '../data/User.dart';
 
 class Requests {
 
-  static const String serverHost = '192.168.1.74';
-  static const int serverPort = 8080;
-  static const String service = 'omniguardian-server';
-  static const String serverBaseURI = 'http://$serverHost:$serverPort/$service';
+  static const String _serverHost = '192.168.1.74';
+  static const int _serverPort = 8080;
+  static const String _service = 'omniguardian-server';
+  static const String _serverBaseURI = 'http://$_serverHost:$_serverPort/$_service';
 
-  static const String addAdminEndpoint = '/addAdmin';
-  static const String addAdminURI = serverBaseURI + addAdminEndpoint;
+  static const String _addAdminEndpoint = '/addAdmin';
+  static const String _addAdminURI = _serverBaseURI + _addAdminEndpoint;
 
-  static const String addGuestEndpoint = '/addGuest';
-  static const String addGuestURI = serverBaseURI + addGuestEndpoint;
+  static const String _addGuestEndpoint = '/addGuest';
+  static const String _addGuestURI = _serverBaseURI + _addGuestEndpoint;
 
-  static const String listDomainsEndpoint = '/listDomains';
-  static const String listDomainsURI = serverBaseURI + listDomainsEndpoint;
+  static const String _listDomainsEndpoint = '/listDomains';
+  static const String _listDomainsURI = _serverBaseURI + _listDomainsEndpoint;
 
-  static const String getUserEndpoint = '/getUser';
-  static const String getUserURI = serverBaseURI + getUserEndpoint;
+  static const String _getUserEndpoint = '/getUser';
+  static const String _getUserURI = _serverBaseURI + _getUserEndpoint;
 
-  static const String getLastAlertEndpoint = '/getLastAlert';
-  static const String getLastAlertURI = serverBaseURI + getLastAlertEndpoint;
+  static const String _getLastAlertEndpoint = '/getLastAlert';
+  static const String _getLastAlertURI = _serverBaseURI + _getLastAlertEndpoint;
 
-  static const int ok = 200;
-  static const int forbidden = 403;
-  static const int notFound = 404;
-  static const int conflict = 409;
+  static const String _getStorageEndpoint = '/getStorage';
+  static const String _getStorageURI = _serverBaseURI + _getStorageEndpoint;
 
-  static const String applicationJson = 'application/json';
+  static const int _ok = 200;
+  static const int _forbidden = 403;
+  static const int _notFound = 404;
+  static const int _conflict = 409;
 
-  static final client = RetryClient(http.Client());
+  static const String _applicationJson = 'application/json';
+
+  static final _client = RetryClient(http.Client());
 
 
   static Future<String?> addAdmin(Domain domain) async {
     debugPrint(jsonEncode(domain.toJson()));
-    final response = await client.post(
-        Uri.parse(addAdminEndpoint),
-        headers: {'Content-Type': applicationJson},
+    final response = await _client.post(
+        Uri.parse(_addAdminURI),
+        headers: {'Content-Type': _applicationJson},
         body: jsonEncode(domain.toJson()));
 
-    if (response.statusCode == ok) {
+    if (response.statusCode == _ok) {
       debugPrint(response.body);
       return response.body;
 
-    } else if(response.statusCode == conflict) {
+    } else if(response.statusCode == _conflict) {
       debugPrint("Conflict: Domain already exists!");
 
     } else {
@@ -62,19 +65,19 @@ class Requests {
 
   static Future<String?> addGuest(User guest) async {
     debugPrint(jsonEncode(guest.toJson()));
-    final response = await client.post(
-        Uri.parse(addGuestEndpoint),
-        headers: {'Content-Type': applicationJson},
+    final response = await _client.post(
+        Uri.parse(_addGuestURI),
+        headers: {'Content-Type': _applicationJson},
         body: jsonEncode(guest.toJson()));
 
-    if (response.statusCode == ok) {
+    if (response.statusCode == _ok) {
       debugPrint(response.body);
       return response.body;
 
-    } else if(response.statusCode == notFound) {
+    } else if(response.statusCode == _notFound) {
       debugPrint("Not Found: Domain name doesn't exist!");
 
-    } else if(response.statusCode == forbidden) {
+    } else if(response.statusCode == _forbidden) {
       debugPrint("Forbidden: Wrong Guest Code!");
 
     } else {
@@ -86,9 +89,9 @@ class Requests {
 
 
   static Future<String?> listDomains() async {
-    final response = await client.get(Uri.parse(listDomainsEndpoint));
+    final response = await _client.get(Uri.parse(_listDomainsURI));
 
-    if (response.statusCode == ok) {
+    if (response.statusCode == _ok) {
       debugPrint(response.body);
       return response.body;
 
@@ -101,13 +104,13 @@ class Requests {
 
 
   static Future<String?> getUser(String email, String password) async {
-    final response = await client.get(Uri.parse("$getUserURI/$email?password=$password"));
+    final response = await _client.get(Uri.parse("$_getUserURI/$email?password=$password"));
 
-    if (response.statusCode == ok) {
+    if (response.statusCode == _ok) {
       debugPrint(response.body);
       return response.body;
 
-    } else if(response.statusCode == forbidden) {
+    } else if(response.statusCode == _forbidden) {
       debugPrint("Incorrect password!");
 
     } else {
@@ -118,13 +121,29 @@ class Requests {
 
 
   static Future<String?> getLastAlert(String email, String password) async {
-    final response = await client.get(Uri.parse("$getLastAlertEndpoint/$email?password=$password"));
+    final response = await _client.get(Uri.parse("$_getLastAlertURI/$email?password=$password"));
 
-    if (response.statusCode == ok) {
+    if (response.statusCode == _ok) {
       debugPrint(response.body);
       return response.body;
 
-    } else if(response.statusCode == forbidden) {
+    } else if(response.statusCode == _forbidden) {
+      debugPrint("Incorrect password!");
+
+    } else {
+      debugPrint(response.statusCode as String?);
+    }
+    return null;
+  }
+
+  static Future<String?> getStorage(String email, String password) async {
+    final response = await _client.get(Uri.parse("$_getStorageURI/$email?password=$password"));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+      return response.body;
+
+    } else if(response.statusCode == _forbidden) {
       debugPrint("Incorrect password!");
 
     } else {

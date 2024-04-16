@@ -4,9 +4,12 @@ import 'package:omni_guardian/components/my_button.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
+import 'package:omni_guardian/network/wifi.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 
+
 import '../../components/my_halft_textfield.dart';
+import '../../data/User.dart';
 
 class Register extends StatefulWidget {
   final Function()? onTap;
@@ -18,15 +21,16 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   // text editing controllers
-  final String firstName = '';
-  final String lastName = '';
-  final String domain = '';
-  final String email = '';
-  final String password = '';
-  final String alarmCode = '';
-  final String guestCode = '';
-  final String nCameras = '';
-  bool isAdmin = false;
+  final String firstName = 'default firstName';
+  final String lastName = 'default lastName';
+  final String domain = 'default domain';
+  final String email = 'default email';
+  final String password = 'default password';
+  final String alarmCode = 'default alarmCode';
+  final String guestCode = 'default guestCode';
+  final String nCameras = 'default nCameras';
+  bool isAdmin = true;
+  final String address = "default address";
 
   String? selectedRole;
 
@@ -172,10 +176,10 @@ class _RegisterState extends State<Register> {
 
               const SizedBox(height: 30),
 
-              //sign in button
+              //sign up button
               MyButton(
                 onTap: () => AuthService(context)
-                    .createUser(email ,password),
+                    .createUser(firstName, lastName, email, domain, guestCode, alarmCode, isAdmin, password, nCameras, address),
                 text: "Sign Up",
               ),
 

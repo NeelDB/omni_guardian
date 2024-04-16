@@ -6,32 +6,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/alert.dart';
 
 
-class UserStorage {
+class Storage {
 
-  static const String userData = 'userData';
-  static const String alertData = 'alertData';
+  static const String _userData = 'userData';
+  static const String _alertData = 'alertData';
 
   static Future<void> updateUserStorage(String userJson) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(userData) != null) {
-      prefs.remove(userData);
+    if (prefs.getString(_userData) != null) {
+      prefs.remove(_userData);
     }
-    prefs.setString(userData, userJson);
+    prefs.setString(_userData, userJson);
   }
 
-  static Future<void> loadUserStorage(String email, password) async {
+  static Future<void> loadUserStorage(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(userData) == null) {
+    if (prefs.getString(_userData) == null) {
       String? userJson = await Requests.getUser(email, password);
       if(userJson != null) {
-        prefs.setString(userData, userJson);
+        prefs.setString(_userData, userJson);
       }
     }
   }
 
   static Future<String> getUserJson() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(userData) ?? '{}';
+    return prefs.getString(_userData) ?? '{}';
   }
 
   static Future<User> getUser() async {
@@ -41,38 +41,40 @@ class UserStorage {
 
   static Future<void> updateAlertStorage(String alertJson) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(alertData) != null) {
-      prefs.remove(alertData);
+    if (prefs.getString(_alertData) != null) {
+      prefs.remove(_alertData);
     }
-    prefs.setString(alertData, alertJson);
+    prefs.setString(_alertData, alertJson);
   }
 
-  static Future<void> loadAlertStorage(String email, password) async {
+  static Future<void> loadAlertStorage(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(alertData) == null) {
+    if (prefs.getString(_alertData) == null) {
       String? alertJson = await Requests.getLastAlert(email, password);
       if(alertJson != null) {
-        prefs.setString(alertData, alertJson);
+        prefs.setString(_alertData, alertJson);
       }
     }
   }
 
   static Future<String> getAlertJson() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(alertData) ?? '{}';
+    return prefs.getString(_alertData) ?? '{}';
   }
 
   static Future<Alert> getAlert() async {
     return jsonDecode(await getAlertJson());
   }
 
-  //TODO correct
-  static Future<void> loadStorage(String email, password) async {
+
+  static Future<void> loadStorage(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(alertData) == null && prefs.getString(userData) == null) {
-      String? alertJson = await Requests.getLastAlert(email, password);
-      if(alertJson != null) {
-        prefs.setString(alertData, alertJson);
+    if (prefs.getString(_alertData) == null && prefs.getString(_userData) == null) {
+      String? storageJson = await Requests.getStorage(email, password);
+      if(storageJson != null) {
+        Map<String, dynamic> storageData = jsonDecode(storageJson);
+        prefs.setString(_userData, storageData['user']);
+        prefs.setString(_alertData, storageData['alert']);
       }
     }
   }

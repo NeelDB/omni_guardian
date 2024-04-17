@@ -24,12 +24,13 @@ class _RegisterState extends State<Register> {
   final firstName = TextEditingController();
   final lastName = TextEditingController();
   final domain = TextEditingController();
+  final domainAddress = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
   final alarmCode = TextEditingController();
   final guestCode = TextEditingController();
   final nCameras = TextEditingController();
-  bool isAdmin = true;
+  bool isAdmin = false;
   final String address = "default address";
 
   String? selectedRole;
@@ -104,15 +105,6 @@ class _RegisterState extends State<Register> {
 
                     const SizedBox(height: 15),
 
-                    //Domain
-                    MyTextField(
-                      controller: domain,
-                      labelText: 'Domain',
-                      obscureText: false,
-                    ),
-
-                    const SizedBox(height: 15),
-
                     //Select between Admin or Guest
                     DropdownButtonFormField<String>(
                       value: selectedRole,
@@ -139,10 +131,29 @@ class _RegisterState extends State<Register> {
                         );
                       }).toList(),
                     ),
+
+                    const SizedBox(height: 15),
+
+                    //Domain
+                    MyTextField(
+                      controller: domain,
+                      labelText: 'Domain',
+                      obscureText: false,
+                    ),
+
                     Visibility(
                       visible: isAdmin,
                       child: Column(
                         children: [
+
+                          const SizedBox(height: 15),
+
+                          //Domain Address
+                          MyTextField(
+                            controller: domainAddress,
+                            labelText: 'Domain Address',
+                            obscureText: false,
+                          ),
 
                           const SizedBox(height: 15),
 

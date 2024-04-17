@@ -55,7 +55,20 @@ class AuthService {
 
     }
     on FirebaseException catch(e) {
-      showErrorMessage(e.code);
+      String errorCode = e.code;
+
+      if(errorCode == 'email-already-in-use') {
+        showErrorMessage('This email is already in use');
+      }
+      else if(errorCode == 'invalid-email') {
+        showErrorMessage("Email address is not valid");
+      }
+      else if(errorCode == 'weak-password') {
+        showErrorMessage('Your password does not meet the required strength');
+      }
+      else {
+        showErrorMessage(e.code);
+      }
     }
   }
 
@@ -77,11 +90,23 @@ class AuthService {
       Navigator.pop(context);
       //TODO Storage.loadStorage(email, password);
 
-    } on FirebaseAuthException catch (e) {
+    }
+
+    on FirebaseAuthException catch (e) {
       // pop the loading circle
       Navigator.pop(context);
 
-      showErrorMessage(e.code);
+      String errorCode = e.code;
+
+      if(errorCode == 'weak-password' || errorCode == 'user-not-found') {
+        showErrorMessage('Email and/or password are incorrect');
+      }
+      else if(errorCode == 'invalid-email') {
+        showErrorMessage('Please insert a valid email');
+      }
+      else {
+        showErrorMessage(errorCode);
+      }
     }
   }
 

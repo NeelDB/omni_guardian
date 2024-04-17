@@ -28,7 +28,7 @@ class MyTextField extends StatelessWidget {
           fillColor: Colors.grey.shade200,
           filled: true,
           labelText: labelText
-      )
+      ),
     );
   }
 }

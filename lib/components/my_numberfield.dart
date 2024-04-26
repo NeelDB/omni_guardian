@@ -4,12 +4,14 @@ import 'package:flutter/services.dart';
 class MyNumberField extends StatelessWidget {
   TextEditingController controller;
   final String labelText;
+  final bool obscureText;
 
   MyNumberField({super.key,
     // Controls the text being edited
     //If user writes in there, we can this to access info
     required this.controller,
     required this.labelText,
+    required this.obscureText,
   });
 
   @override
@@ -17,6 +19,7 @@ class MyNumberField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
+      obscureText: obscureText,
       inputFormatters: [
         LengthLimitingTextInputFormatter(4),
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))

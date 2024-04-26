@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  final List<Widget> pages = const [
+  final List<Widget> pages = [
     Home(),
     Alarm(),
     Gallery(),

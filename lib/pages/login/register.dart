@@ -160,7 +160,8 @@ class _RegisterState extends State<Register> {
                           //Alarm code
                           MyNumberField(
                               controller: alarmCode,
-                              labelText: 'Alarm code'
+                              labelText: 'Alarm code',
+                              obscureText: false,
                           ),
 
                           const SizedBox(height: 15),
@@ -168,7 +169,8 @@ class _RegisterState extends State<Register> {
                           //Number of cameras
                           MyNumberField(
                               controller: nCameras,
-                              labelText: 'Number of cameras'
+                              labelText: 'Number of cameras',
+                              obscureText: false,
                           )
                         ],
                         // Add your logic for admin input handling
@@ -179,7 +181,8 @@ class _RegisterState extends State<Register> {
 
                     MyNumberField(
                         controller: guestCode,
-                        labelText: 'Guest code'
+                        labelText: 'Guest code',
+                        obscureText: false,
                     )
                   ],
                 ),

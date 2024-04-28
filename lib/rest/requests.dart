@@ -9,7 +9,7 @@ import '../data/User.dart';
 
 class Requests {
 
-  static const String _serverHost = '192.168.1.74';
+  static const String _serverHost = '192.168.1.10';
   static const int _serverPort = 8080;
   static const String _service = 'omniguardian-server';
   static const String _serverBaseURI = 'http://$_serverHost:$_serverPort/$_service';

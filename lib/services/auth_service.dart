@@ -20,20 +20,24 @@ class AuthService {
   static const String _defaultToken = 'Default token';
   static const String _defaultAlarmCode = 'Default alarm code';
 
-  void createUser(String firstName, String lastName, String email, String domain, String guestCode, String alarmCode,
-      bool isAdmin, String password, String nCameras, String address) async {
+
+  void createUser(String firstName, String lastName, String domain, String guestCode, String alarmCode,
+      bool isAdmin, String nCameras, String address) async {
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
       String ip = await Wifi.getUserIP();
       String? userJson;
+
+      String? email = getUserEmail();
+      String password = "";
+
 
       if(isAdmin) {
         Camera cam1 = Camera("cam1", false, domain);
         Camera cam2 = Camera("cam2", false, domain);
 
         data.User admin =
-          data.User(firstName, lastName, email, ip, domain, guestCode, alarmCode, isAdmin, _defaultToken, password);
+          data.User(firstName, lastName, email!, ip, domain, guestCode, alarmCode, isAdmin, _defaultToken, password);
 
         Domain newDomain =
           Domain(domain, [cam1, cam2], [admin], _defaultAlertList, address, guestCode, alarmCode, _defaultToken);
@@ -43,15 +47,17 @@ class AuthService {
 
       else {
         data.User guest =
-          data.User(firstName, lastName, email, ip, domain, guestCode, _defaultAlarmCode, isAdmin, _defaultToken, password);
+          data.User(firstName, lastName, email!, ip, domain, guestCode, _defaultAlarmCode, isAdmin, _defaultToken, password);
 
         userJson = await Requests.addGuest(guest);
       }
 
       if(userJson != null) {
-        //debugPrint("Created user: $userJson");
-        //TODO Storage.updateUserStorage(userJson);
+        await Storage.updateUserStorage(userJson);
+        String json = await Storage.getUserJson();
+        debugPrint("Created user: $json");
       }
+
 
     }
     on FirebaseException catch(e) {
@@ -88,7 +94,7 @@ class AuthService {
       );
       // pop the loading circle
       Navigator.pop(context);
-      //TODO Storage.loadStorage(email, password);
+      Storage.loadStorage(email, password);
 
     }
 
@@ -162,6 +168,7 @@ class AuthService {
   String? getUserEmail() {
     return FirebaseAuth.instance.currentUser?.email;
   }
+
 }
 
 class NoGoogleAccountChosenException implements Exception {

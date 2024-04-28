@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omni_guardian/pages/alarm.dart';
 import 'package:omni_guardian/pages/gallery.dart';
 import 'package:omni_guardian/pages/home/home.dart';
+import 'package:omni_guardian/pages/login/login.dart';
+import 'package:omni_guardian/pages/login/login_or_register.dart';
 import 'package:omni_guardian/pages/profile/profile.dart';
 
 class HomePage extends StatefulWidget {

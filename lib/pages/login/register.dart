@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/colors.dart';
 import 'package:omni_guardian/components/my_button.dart';
@@ -5,6 +6,7 @@ import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/components/my_textfield.dart';
 import 'package:omni_guardian/components/square_tile.dart';
 import 'package:omni_guardian/network/wifi.dart';
+import 'package:omni_guardian/pages/login/register_form.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 
 
@@ -21,19 +23,10 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   // text editing controllers
-  final firstName = TextEditingController();
-  final lastName = TextEditingController();
-  final domain = TextEditingController();
-  final domainAddress = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
-  final alarmCode = TextEditingController();
-  final guestCode = TextEditingController();
-  final nCameras = TextEditingController();
-  bool isAdmin = false;
-  final String address = "default address";
+  final confirmPassword = TextEditingController();
 
-  String? selectedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +49,7 @@ class _RegisterState extends State<Register> {
               const SizedBox(height: 30),
 
               //Let's create an account for you
-              Text('Let\'s  create an account for you!',
+              Text('Let\'s create an account for you!',
                   style: TextStyle(
                       color: MyColors.textColorPrimary,
                       fontSize: 16
@@ -70,23 +63,6 @@ class _RegisterState extends State<Register> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Column(
                   children: [
-                    MyRow(
-                      leftWidget: //email
-                      MyTextField(
-                        controller: firstName,
-                        labelText: 'First Name',
-                        obscureText: false,
-                      ),
-                      rightWidget:
-                      MyTextField(
-                        controller: lastName,
-                        labelText: 'Last Name',
-                        obscureText: false,
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
-
                     //email
                     MyTextField(
                       controller: email,
@@ -105,85 +81,14 @@ class _RegisterState extends State<Register> {
 
                     const SizedBox(height: 15),
 
-                    //Select between Admin or Guest
-                    DropdownButtonFormField<String>(
-                      value: selectedRole,
-                      hint: const Text('Select Role'),
-                      decoration: const InputDecoration(
-                          labelText: 'Register as',
-                          border: OutlineInputBorder(),
-                          filled: true
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          if(value == 'Admin') {
-                            isAdmin = true;
-                          }
-                          else {
-                            isAdmin = false;
-                          }
-                        });
-                      },
-                      items: ['Admin', 'Guest'].map((role) {
-                        return DropdownMenuItem<String>(
-                          value: role,
-                          child: Text(role),
-                        );
-                      }).toList(),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    //Domain
+                    //confirm password
                     MyTextField(
-                      controller: domain,
-                      labelText: 'Domain',
-                      obscureText: false,
+                      controller: confirmPassword,
+                      labelText: 'Confirm Password',
+                      obscureText: true,
                     ),
 
-                    Visibility(
-                      visible: isAdmin,
-                      child: Column(
-                        children: [
 
-                          const SizedBox(height: 15),
-
-                          //Domain Address
-                          MyTextField(
-                            controller: domainAddress,
-                            labelText: 'Domain Address',
-                            obscureText: false,
-                          ),
-
-                          const SizedBox(height: 15),
-
-                          //Alarm code
-                          MyNumberField(
-                              controller: alarmCode,
-                              labelText: 'Alarm code',
-                              obscureText: false,
-                          ),
-
-                          const SizedBox(height: 15),
-
-                          //Number of cameras
-                          MyNumberField(
-                              controller: nCameras,
-                              labelText: 'Number of cameras',
-                              obscureText: false,
-                          )
-                        ],
-                        // Add your logic for admin input handling
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    MyNumberField(
-                        controller: guestCode,
-                        labelText: 'Guest code',
-                        obscureText: false,
-                    )
                   ],
                 ),
               ),
@@ -192,10 +97,12 @@ class _RegisterState extends State<Register> {
 
               //sign up button
               MyButton(
-                onTap: () => AuthService(context)
-                    .createUser(firstName.text, lastName.text, email.text, domain.text, guestCode.text, alarmCode.text, isAdmin, password.text, nCameras.text, address),
+                onTap: () {
+                  registerUser(email.text, password.text, confirmPassword.text);
+                },
                 text: "Sign Up",
               ),
+
 
               const SizedBox(height: 30),
 
@@ -231,7 +138,7 @@ class _RegisterState extends State<Register> {
 
               //google sign in
               SquareTile(
-                  onTap: () => AuthService(context).authWithGoogle(),
+                  onTap: () => authWithGoogle(),
                   imagePath: 'assets/images/google.png'
               ),
 
@@ -264,6 +171,70 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> registerUser(String email, String password, String confirmPassword) async {
+
+    // Check if the password and confirm password match
+    if (password != confirmPassword) {
+      errorMessage('The passwords do not match.');
+      return; // Exit the function if the passwords don't match
+    }
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      // On successful registration, navigate to the home page or show a success message
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RegisterForm()));
+    } on FirebaseAuthException catch (e) {
+      String errorMsg;
+      switch (e.code) {
+        case 'email-already-in-use':
+          errorMsg = 'This email is already in use.';
+          break;
+        case 'invalid-email':
+          errorMsg = 'Email address is not valid.';
+          break;
+        case 'weak-password':
+          errorMsg = 'Your password does not meet the required strength.';
+          break;
+        default:
+          errorMsg = 'An error occurred: ${e.code}';
+          break;
+      }
+      errorMessage(errorMsg);
+    }
+  }
+
+  Future<void> authWithGoogle() async {
+    try {
+      await AuthService(context).signInWithGoogle();
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RegisterForm()));
+
+    } on NoGoogleAccountChosenException {
+      return;
+    } catch (e) {
+      errorMessage(e.toString());
+    }
+  }
+
+  void errorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -73,8 +73,8 @@ class Storage {
       String? storageJson = await Requests.getStorage(email, password);
       if(storageJson != null) {
         Map<String, dynamic> storageData = jsonDecode(storageJson);
-        prefs.setString(_userData, storageData['user']);
-        prefs.setString(_alertData, storageData['alert']);
+        prefs.setString(_userData, jsonEncode(storageData['user']));
+        prefs.setString(_alertData, jsonEncode(storageData['alert']));
       }
     }
   }

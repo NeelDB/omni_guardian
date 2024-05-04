@@ -9,7 +9,7 @@ import '../data/User.dart';
 
 class Requests {
 
-  static const String _serverHost = '192.168.1.10';
+  static const String _serverHost = '192.168.1.74';
   static const int _serverPort = 8080;
   static const String _service = 'omniguardian-server';
   static const String _serverBaseURI = 'http://$_serverHost:$_serverPort/$_service';
@@ -137,23 +137,16 @@ class Requests {
   }
 
   static Future<String?> getStorage(String email, String password) async {
-    final response = await _client.get(Uri.parse("$_getStorageURI/$email?password=$password"));
+    final response = await _client.get(
+        Uri.parse("$_getStorageURI/$email?password=$password"));
 
     if (response.statusCode == _ok) {
       debugPrint(response.body);
       return response.body;
-
-    } else if(response.statusCode == _forbidden) {
+    } else if (response.statusCode == _forbidden) {
       debugPrint("Incorrect password!");
-
-    } else {
-      debugPrint(response.statusCode as String?);
     }
     return null;
   }
-
-
-
-
 
 }

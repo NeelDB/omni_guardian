@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -27,17 +25,15 @@ class AuthService {
     try {
       String ip = await Wifi.getUserIP();
       String? userJson;
-
       String? email = getUserEmail();
-      String password = "";
-
+      String? password = getUserUID();
 
       if(isAdmin) {
         Camera cam1 = Camera("cam1", false, domain);
         Camera cam2 = Camera("cam2", false, domain);
 
         data.User admin =
-          data.User(firstName, lastName, email!, ip, domain, guestCode, alarmCode, isAdmin, _defaultToken, password);
+          data.User(firstName, lastName, email!, ip, domain, guestCode, alarmCode, isAdmin, _defaultToken, password!);
 
         Domain newDomain =
           Domain(domain, [cam1, cam2], [admin], _defaultAlertList, address, guestCode, alarmCode, _defaultToken);
@@ -47,17 +43,14 @@ class AuthService {
 
       else {
         data.User guest =
-          data.User(firstName, lastName, email!, ip, domain, guestCode, _defaultAlarmCode, isAdmin, _defaultToken, password);
+          data.User(firstName, lastName, email!, ip, domain, guestCode, _defaultAlarmCode, isAdmin, _defaultToken, password!);
 
         userJson = await Requests.addGuest(guest);
       }
 
       if(userJson != null) {
         await Storage.updateUserStorage(userJson);
-        String json = await Storage.getUserJson();
-        debugPrint("Created user: $json");
       }
-
 
     }
     on FirebaseException catch(e) {
@@ -94,8 +87,10 @@ class AuthService {
       );
       // pop the loading circle
       Navigator.pop(context);
-      Storage.loadStorage(email, password);
 
+      await Storage.loadStorage(email, getUserUID()!);
+      String json = await Storage.getUserJson();
+      debugPrint("Get back user: $json");
     }
 
     on FirebaseAuthException catch (e) {
@@ -151,6 +146,8 @@ class AuthService {
       idToken: googleAuth.idToken,
     );
 
+
+
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
@@ -158,6 +155,7 @@ class AuthService {
   Future<void> authWithGoogle() async {
     try {
       await signInWithGoogle();
+      await Storage.loadStorage(getUserEmail()!, getUserUID()!);
     } on NoGoogleAccountChosenException {
       return;
     } catch (e) {
@@ -167,6 +165,10 @@ class AuthService {
 
   String? getUserEmail() {
     return FirebaseAuth.instance.currentUser?.email;
+  }
+
+  String? getUserUID() {
+    return FirebaseAuth.instance.currentUser?.uid;
   }
 
 }

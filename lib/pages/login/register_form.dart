@@ -176,7 +176,8 @@ class _RegisterFormState extends State<RegisterForm> {
                       alarmCode.text,
                       isAdmin,
                       nCameras.text,
-                      domainAddress.text);
+                      domainAddress.text
+                  );
 
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
 

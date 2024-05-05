@@ -5,12 +5,14 @@ class Alert {
   Uint8List imageBytes;
   bool isFalseAlarm;
   String domain;
+  String camera;
 
   Alert(
       this.timestamp,
       this.imageBytes,
       this.isFalseAlarm,
-      this.domain
+      this.domain,
+      this.camera
       );
 
 
@@ -19,7 +21,8 @@ class Alert {
       'timestamp' : timestamp,
       'imageBytes' : imageBytes,
       'isFalseAlarm' : isFalseAlarm,
-      'domain' : domain
+      'domain' : domain,
+      'camera' : camera
     };
   }
 }

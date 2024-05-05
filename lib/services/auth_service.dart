@@ -89,8 +89,6 @@ class AuthService {
       Navigator.pop(context);
 
       await Storage.loadStorage(email, getUserUID()!);
-      String json = await Storage.getUserJson();
-      debugPrint("Get back user: $json");
     }
 
     on FirebaseAuthException catch (e) {

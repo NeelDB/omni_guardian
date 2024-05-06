@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 class Alert {
   String timestamp;
-  Uint8List imageBytes;
+  String imageBytes;
   bool isFalseAlarm;
   String domain;
   String camera;

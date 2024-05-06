@@ -10,9 +10,16 @@ import '../data/User.dart';
 class Requests {
 
   static const String _serverHost = '192.168.1.74';
+  static const String _cameraHost = '192.168.1.147';
+
   static const int _serverPort = 8080;
+  static const int _cameraPort = 80;
+
   static const String _service = 'omniguardian-server';
+  static const String _cameraService = 'capture';
+
   static const String _serverBaseURI = 'http://$_serverHost:$_serverPort/$_service';
+  static const String _cameraBaseURI = 'http://$_cameraHost:$_cameraPort/$_cameraService';
 
   static const String _addAdminEndpoint = '/addAdmin';
   static const String _addAdminURI = _serverBaseURI + _addAdminEndpoint;
@@ -55,9 +62,6 @@ class Requests {
 
     } else if(response.statusCode == _conflict) {
       debugPrint("Conflict: Domain already exists!");
-
-    } else {
-      print(response.statusCode);
     }
 
     return null;
@@ -79,9 +83,17 @@ class Requests {
 
     } else if(response.statusCode == _forbidden) {
       debugPrint("Forbidden: Wrong Guest Code!");
+    }
 
-    } else {
-      debugPrint(response.statusCode as String?);
+    return null;
+  }
+
+  static Future<String?> addAlert() async {
+    final response = await _client.get(Uri.parse(_cameraBaseURI)); //TODO change ESP32 to get
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+      return response.body;
     }
 
     return null;
@@ -94,9 +106,6 @@ class Requests {
     if (response.statusCode == _ok) {
       debugPrint(response.body);
       return response.body;
-
-    } else {
-      debugPrint(response.statusCode as String?);
     }
 
     return null;
@@ -112,10 +121,8 @@ class Requests {
 
     } else if(response.statusCode == _forbidden) {
       debugPrint("Incorrect password!");
-
-    } else {
-      debugPrint(response.statusCode as String?);
     }
+
     return null;
   }
 
@@ -129,10 +136,8 @@ class Requests {
 
     } else if(response.statusCode == _forbidden) {
       debugPrint("Incorrect password!");
-
-    } else {
-      debugPrint(response.statusCode as String?);
     }
+
     return null;
   }
 
@@ -146,6 +151,7 @@ class Requests {
     } else if (response.statusCode == _forbidden) {
       debugPrint("Incorrect password!");
     }
+
     return null;
   }
 

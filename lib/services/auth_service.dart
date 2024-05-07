@@ -1,8 +1,10 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omni_guardian/data/alert.dart';
-import 'package:omni_guardian/data/photo.dart';
 import 'package:omni_guardian/network/wifi.dart';
 import 'package:omni_guardian/rest/requests.dart';
 import 'package:omni_guardian/storage/storage.dart';
@@ -92,8 +94,13 @@ class AuthService {
       await Storage.loadStorage(email, getUserUID()!);
 
       // TODO Test image
-      //String? alertJson = await Requests.addAlert();
-      //await Photo.savePhoto(alertJson!);
+      String? alertJson = await Requests.addAlert();
+      Map<String, dynamic> alert = jsonDecode(alertJson!);
+      Uint8List bytes = base64.decode(alert['imageBytes']);
+      debugPrint("Received timestamp: ${alert['timestamp']}");
+      debugPrint("Received bytes: $bytes");
+      Storage.updateAlertStorage(alertJson);
+
     }
 
     on FirebaseAuthException catch (e) {

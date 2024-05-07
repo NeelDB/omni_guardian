@@ -89,7 +89,7 @@ class Requests {
   }
 
   static Future<String?> addAlert() async {
-    final response = await _client.get(Uri.parse(_cameraBaseURI)); //TODO change ESP32 to get
+    final response = await _client.get(Uri.parse(_cameraBaseURI));
 
     if (response.statusCode == _ok) {
       debugPrint(response.body);

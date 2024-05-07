@@ -32,7 +32,7 @@ class AuthService {
       String? password = getUserUID();
 
       if(isAdmin) {
-        Camera cam1 = Camera("cam1", false, domain);
+        Camera cam1 = Camera("cam1", true, domain);
         Camera cam2 = Camera("cam2", false, domain);
 
         data.User admin =

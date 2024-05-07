@@ -99,7 +99,7 @@ class AuthService {
       Uint8List bytes = base64.decode(alert['imageBytes']);
       debugPrint("Received timestamp: ${alert['timestamp']}");
       debugPrint("Received bytes: $bytes");
-      Storage.updateAlertStorage(alertJson);
+      await Storage.updateAlertStorage(alertJson);
 
     }
 

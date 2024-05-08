@@ -9,8 +9,17 @@ import '../data/User.dart';
 
 class Requests {
 
-  static const String _serverHost = '192.168.1.74';
+  // Home Server and Camera - Bessa
+  //static const String _serverHost = '192.168.1.74';
+  //static const String _cameraHost = '192.168.1.147';
+
+  // Home Server and Camera - Neel
+  static const String _serverHost = '192.168.1.251';
   static const String _cameraHost = '192.168.1.147';
+
+  // Remote Server and Camera
+  //static const String _serverHost = '192.168.105.237';
+  //static const String _cameraHost = '192.168.105.196';
 
   static const int _serverPort = 8080;
   static const int _cameraPort = 80;
@@ -62,6 +71,7 @@ class Requests {
 
     } else if(response.statusCode == _conflict) {
       debugPrint("Conflict: Domain already exists!");
+      throw Exception('Conflict: Domain already exists!');
     }
 
     return null;
@@ -80,9 +90,11 @@ class Requests {
 
     } else if(response.statusCode == _notFound) {
       debugPrint("Not Found: Domain name doesn't exist!");
+      throw Exception('Not Found: Domain name doesn\'t exist!');
 
     } else if(response.statusCode == _forbidden) {
       debugPrint("Forbidden: Wrong Guest Code!");
+      throw Exception('Forbidden: Wrong Guest Code!');
     }
 
     return null;

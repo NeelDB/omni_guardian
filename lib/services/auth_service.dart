@@ -22,14 +22,18 @@ class AuthService {
   static const String _defaultAlarmCode = 'Default alarm code';
 
 
-  void createUser(String firstName, String lastName, String domain, String guestCode, String alarmCode,
-      bool isAdmin, String nCameras, String address) async {
+  void createUser(String? email, String? password, String? confirmPassword, String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String nCameras, String address) async {
+
+    // Check if the password and confirm password match
+    if (confirmPassword != null && password != confirmPassword) {
+      errorMessage('The passwords do not match.');
+      return; // Exit the function if the passwords don't match
+    }
 
     try {
+
       String ip = await Wifi.getUserIP();
       String? userJson;
-      String? email = getUserEmail();
-      String? password = getUserUID();
 
       if(isAdmin) {
         Camera cam1 = Camera("cam1", true, domain);
@@ -55,43 +59,70 @@ class AuthService {
         await Storage.updateUserStorage(userJson);
       }
 
-    }
-    on FirebaseException catch(e) {
-      String errorCode = e.code;
+      //If its google sign up confirm password will be null
+      if(confirmPassword != null) {
+        registerUser(email, password);
+      }
 
-      if(errorCode == 'email-already-in-use') {
-        showErrorMessage('This email is already in use');
-      }
-      else if(errorCode == 'invalid-email') {
-        showErrorMessage("Email address is not valid");
-      }
-      else if(errorCode == 'weak-password') {
-        showErrorMessage('Your password does not meet the required strength');
-      }
-      else {
-        showErrorMessage(e.code);
-      }
+    }
+    on Exception catch(e) {
+      errorMessage(e.toString());
     }
   }
 
-  void signUserIn(String email, String password) async {
-    // show loading circle
+  Future<void> registerUser(String email, String password) async {
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      // On successful registration, navigate to the home page or show a success message
+    } on FirebaseAuthException catch (e) {
+      String errorMsg;
+      switch (e.code) {
+        case 'email-already-in-use':
+          errorMsg = 'This email is already in use.';
+          break;
+        case 'invalid-email':
+          errorMsg = 'Email address is not valid.';
+          break;
+        case 'weak-password':
+          errorMsg = 'Your password does not meet the required strength.';
+          break;
+        default:
+          errorMsg = 'An error occurred: ${e.code}';
+          break;
+      }
+      errorMessage(errorMsg);
+    }
+  }
+
+  void errorMessage(String message) {
     showDialog(
       context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+          ],
+        );
       },
     );
+  }
 
+  void signUserIn(String email, String password) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // pop the loading circle
-      Navigator.pop(context);
 
-      await Storage.loadStorage(email, getUserUID()!);
+      await Storage.loadStorage(email, password);
 
       // TODO Test image
       String? alertJson = await Requests.addAlert();
@@ -104,38 +135,19 @@ class AuthService {
     }
 
     on FirebaseAuthException catch (e) {
-      // pop the loading circle
-      Navigator.pop(context);
 
       String errorCode = e.code;
 
       if(errorCode == 'weak-password' || errorCode == 'user-not-found') {
-        showErrorMessage('Email and/or password are incorrect');
+        errorMessage('Email and/or password are incorrect');
       }
       else if(errorCode == 'invalid-email') {
-        showErrorMessage('Please insert a valid email');
+        errorMessage('Please insert a valid email');
       }
       else {
-        showErrorMessage(errorCode);
+        errorMessage(errorCode);
       }
     }
-  }
-
-  void showErrorMessage(String msg) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(
-              msg,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   Future<UserCredential> signInWithGoogle() async {
@@ -156,8 +168,6 @@ class AuthService {
       idToken: googleAuth.idToken,
     );
 
-
-
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
@@ -169,7 +179,24 @@ class AuthService {
     } on NoGoogleAccountChosenException {
       return;
     } catch (e) {
-      showErrorMessage(e.toString());
+      errorMessage(e.toString());
+    }
+  }
+
+  Future<void> registerWithGoogle(String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String nCameras, String address) async {
+    try {
+
+      //TODO
+
+      await signInWithGoogle();
+      createUser(getUserEmail(), getUserUID(), null, firstName, lastName, domain, guestCode, alarmCode, isAdmin, nCameras, address);
+
+    } on NoGoogleAccountChosenException {
+      return;
+    } catch (e) {
+      errorMessage(e.toString());
+      await FirebaseAuth.instance.signOut();
+      await GoogleSignIn().signOut();
     }
   }
 

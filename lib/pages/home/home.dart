@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
-import 'package:omni_guardian/services/auth_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:omni_guardian/storage/storage.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -16,7 +16,13 @@ class _HomeState extends State<Home> {
   final codeController = TextEditingController();
   bool isOn = false;
   List<String> cameras = ['Camera 1'];
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
+
+  Future<String> getDomainName() async {
+    Map<String, dynamic> user = await Storage.getUser();
+    String domain = user['domain'];
+    return domain;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +32,18 @@ class _HomeState extends State<Home> {
         child: Center(
           child: Column(
               children: [
-                const Text(
-                    'Domain Name',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontStyle: FontStyle.italic
-                    ),
-                  ),
+                FutureBuilder<String>(
+                  future: getDomainName(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator(); // Display a loader while waiting for the result
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return Text(snapshot.data ?? 'Domain Name', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+                    }
+                  },
+                ),
 
                 const SizedBox(height: 30),
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/services/auth_service.dart';
+import 'package:omni_guardian/storage/storage.dart';
 import 'components/profile_menu_widgets.dart';
 
 class Profile extends StatelessWidget {
@@ -12,6 +13,12 @@ class Profile extends StatelessWidget {
   Future<void> signUserOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
+  }
+
+  Future<String> getName() async {
+    Map<String, dynamic> user = await Storage.getUser();
+    String name = user['firstname'] + " " + user['lastname'];
+    return name;
   }
 
   @override
@@ -56,7 +63,19 @@ class Profile extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              const Text('Richie Bessa', style: TextStyle(fontWeight: FontWeight.bold)),
+              //const Text( getName(), style: TextStyle(fontWeight: FontWeight.bold)),
+              FutureBuilder<String>(
+                future: getName(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator(); // Display a loader while waiting for the result
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return Text(snapshot.data ?? 'Richie Bessa', style: const TextStyle(fontWeight: FontWeight.bold));
+                  }
+                },
+              ),
               Text(AuthService(context).getUserEmail() ?? 'Teste'),
               
               const SizedBox(height: 20),
@@ -99,11 +118,8 @@ class Profile extends StatelessWidget {
 
             ],
           ),
-
         ),
       )
-
     );
   }
-
 }

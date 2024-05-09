@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omni_guardian/data/alert.dart';
 import 'package:omni_guardian/network/wifi.dart';
+import 'package:omni_guardian/pages/profile/profile.dart';
 import 'package:omni_guardian/rest/requests.dart';
 import 'package:omni_guardian/storage/storage.dart';
 import '../data/Camera.dart';

@@ -34,7 +34,7 @@ class Storage {
     return prefs.getString(_userData) ?? '{}';
   }
 
-  static Future<User> getUser() async {
+  static Future<Map<String, dynamic>> getUser() async {
     return jsonDecode(await getUserJson());
   }
 

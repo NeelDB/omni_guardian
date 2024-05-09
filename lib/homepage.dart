@@ -18,12 +18,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  // sign user out method
-  Future<void> signUserOut() async {
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
-  }
-
   void navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;

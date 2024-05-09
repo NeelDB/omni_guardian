@@ -14,12 +14,12 @@ class Requests {
   //static const String _cameraHost = '192.168.1.147';
 
   // Home Server and Camera - Neel
-  static const String _serverHost = '192.168.1.251';
-  static const String _cameraHost = '192.168.1.147';
+  //static const String _serverHost = '192.168.1.251';
+  //static const String _cameraHost = '192.168.1.147';
 
-  // Remote Server and Camera
-  //static const String _serverHost = '192.168.105.237';
-  //static const String _cameraHost = '192.168.105.196';
+  // Remote Server and Camera - Bessa
+  static const String _serverHost = '192.168.105.237';
+  static const String _cameraHost = '192.168.105.196';
 
   static const int _serverPort = 8080;
   static const int _cameraPort = 80;
@@ -47,6 +47,9 @@ class Requests {
 
   static const String _getStorageEndpoint = '/getStorage';
   static const String _getStorageURI = _serverBaseURI + _getStorageEndpoint;
+
+  static const String _getDefaultAlertEndpoint = '/getDefaultAlert';
+  static const String _getDefaultAlertURI = _serverBaseURI + _getDefaultAlertEndpoint;
 
   static const int _ok = 200;
   static const int _forbidden = 403;
@@ -141,6 +144,20 @@ class Requests {
 
   static Future<String?> getLastAlert(String email, String password) async {
     final response = await _client.get(Uri.parse("$_getLastAlertURI/$email?password=$password"));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+      return response.body;
+
+    } else if(response.statusCode == _forbidden) {
+      debugPrint("Incorrect password!");
+    }
+
+    return null;
+  }
+
+  static Future<String?> getDefaultAlert() async {
+    final response = await _client.get(Uri.parse(_getDefaultAlertURI));
 
     if (response.statusCode == _ok) {
       debugPrint(response.body);

@@ -32,7 +32,6 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
     _tabController = TabController(length: 2, vsync: this);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,8 +100,6 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
                 ),
               ),
 
-
-
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
@@ -120,18 +117,4 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
         ),
     );
   }
-
-
-
-  Future<void> authWithGoogle() async {
-    try {
-      await AuthService(context).signInWithGoogle();
-
-    } on NoGoogleAccountChosenException {
-      return;
-    } catch (e) {
-      //errorMessage(e.toString());
-    }
-  }
-
 }

@@ -220,7 +220,6 @@ class AuthService {
   String? getUserEmail() {
     return FirebaseAuth.instance.currentUser?.email;
   }
-
 }
 
 class NoGoogleAccountChosenException implements Exception {

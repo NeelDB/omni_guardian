@@ -4,6 +4,7 @@ import '../../components/my_button.dart';
 import '../../components/my_halft_textfield.dart';
 import '../../components/my_numberfield.dart';
 import '../../components/my_textfield.dart';
+import '../../components/square_tile.dart';
 import '../../services/auth_service.dart';
 
 class RegisterGoogle extends StatefulWidget {
@@ -129,24 +130,21 @@ class _RegisterGoogleState extends State<RegisterGoogle> {
 
                 //sign up button
                 MyButton(
-                  onTap: () {
-                    AuthService(context).registerWithGoogle(
-                        firstName.text,
-                        lastName.text,
-                        domain.text,
-                        guestCode.text,
-                        alarmCode.text,
-                        isAdmin,
-                        domainAddress.text
-                    );
-                  },
-                  text: "Submit",
+                    onTap: () async {
+                      await AuthService(context).registerWithGoogle(
+                          firstName.text,
+                          lastName.text,
+                          domain.text,
+                          guestCode.text,
+                          alarmCode.text,
+                          isAdmin,
+                          domainAddress.text
+                      );
+                    },
+                    text: 'Sign Up'
                 ),
 
                 const SizedBox(height: 20)
-
-
-
               ],
             ),
           ),

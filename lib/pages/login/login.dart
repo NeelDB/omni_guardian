@@ -17,6 +17,7 @@ class _LoginState extends State<Login> {
   // text editing controllers
   final emailController = TextEditingController();
   final password = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +91,20 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 25),
 
               //sign in button
+              isLoading? const CircularProgressIndicator() :
               MyButton(
-                onTap: () => AuthService(context)
-                    .signUserIn(emailController.text, password.text),
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await AuthService(context).signUserIn(
+                    emailController.text,
+                    password.text,
+                  );
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
                 text: "Sign In",
               ),
 

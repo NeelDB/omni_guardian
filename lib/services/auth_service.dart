@@ -116,7 +116,7 @@ class AuthService {
     );
   }
 
-  void signUserIn(String email, String password) async {
+  Future<void> signUserIn(String email, String password) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -219,10 +219,6 @@ class AuthService {
 
   String? getUserEmail() {
     return FirebaseAuth.instance.currentUser?.email;
-  }
-
-  String? getUserUID() {
-    return FirebaseAuth.instance.currentUser?.uid;
   }
 
 }

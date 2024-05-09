@@ -26,7 +26,6 @@ class _RegisterEmailState extends State<RegisterEmail> {
   final domainAddress = TextEditingController();
   final alarmCode = TextEditingController();
   final guestCode = TextEditingController();
-  final nCameras = TextEditingController();
   bool isAdmin = false;
   String? selectedRole;
 
@@ -142,15 +141,6 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         labelText: 'Alarm code',
                         obscureText: false,
                       ),
-
-                      const SizedBox(height: 15),
-
-                      //Number of cameras
-                      MyNumberField(
-                        controller: nCameras,
-                        labelText: 'Number of cameras',
-                        obscureText: false,
-                      )
                     ],
                     // Add your logic for admin input handling
                   ),
@@ -179,7 +169,6 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         guestCode.text,
                         alarmCode.text,
                         isAdmin,
-                        nCameras.text,
                         domainAddress.text
                     );
                   },

@@ -22,7 +22,7 @@ class AuthService {
   static const String _defaultAlarmCode = 'Default alarm code';
 
 
-  void createUser(String? email, String? password, String? confirmPassword, String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String nCameras, String address) async {
+  void createUser(String? email, String? password, String? confirmPassword, String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String address) async {
 
     // Check if the password and confirm password match
     if (confirmPassword != null && password != confirmPassword) {
@@ -183,13 +183,13 @@ class AuthService {
     }
   }
 
-  Future<void> registerWithGoogle(String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String nCameras, String address) async {
+  Future<void> registerWithGoogle(String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String address) async {
     try {
 
       //TODO
 
       await signInWithGoogle();
-      createUser(getUserEmail(), getUserUID(), null, firstName, lastName, domain, guestCode, alarmCode, isAdmin, nCameras, address);
+      createUser(getUserEmail(), getUserUID(), null, firstName, lastName, domain, guestCode, alarmCode, isAdmin, address);
 
     } on NoGoogleAccountChosenException {
       return;

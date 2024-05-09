@@ -21,7 +21,6 @@ class _RegisterGoogleState extends State<RegisterGoogle> {
   final domainAddress = TextEditingController();
   final alarmCode = TextEditingController();
   final guestCode = TextEditingController();
-  final nCameras = TextEditingController();
   bool isAdmin = false;
   String? selectedRole;
 
@@ -113,15 +112,6 @@ class _RegisterGoogleState extends State<RegisterGoogle> {
                         labelText: 'Alarm code',
                         obscureText: false,
                       ),
-
-                      const SizedBox(height: 15),
-
-                      //Number of cameras
-                      MyNumberField(
-                        controller: nCameras,
-                        labelText: 'Number of cameras',
-                        obscureText: false,
-                      )
                     ],
                     // Add your logic for admin input handling
                   ),
@@ -147,7 +137,6 @@ class _RegisterGoogleState extends State<RegisterGoogle> {
                         guestCode.text,
                         alarmCode.text,
                         isAdmin,
-                        nCameras.text,
                         domainAddress.text
                     );
                   },

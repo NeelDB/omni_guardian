@@ -22,7 +22,7 @@ class AuthService {
   static const String _defaultAlarmCode = 'Default alarm code';
 
 
-  void createUser(String? email, String? password, String? confirmPassword, String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String address) async {
+  Future<void> createUser(String? email, String? password, String? confirmPassword, String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String address) async {
 
     // Check if the password and confirm password match
     if (confirmPassword != null && password != confirmPassword) {
@@ -67,6 +67,7 @@ class AuthService {
     }
     on Exception catch(e) {
       errorMessage(e.toString());
+      rethrow;
     }
   }
 
@@ -158,6 +159,8 @@ class AuthService {
       throw const NoGoogleAccountChosenException();
     }
 
+    await Storage.loadStorage(googleUser.email, googleUser.id);
+
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
     await googleUser.authentication;
@@ -175,7 +178,6 @@ class AuthService {
   Future<void> authWithGoogle() async {
     try {
       await signInWithGoogle();
-      await Storage.loadStorage(getUserEmail()!, getUserUID()!);
     } on NoGoogleAccountChosenException {
       return;
     } catch (e) {
@@ -186,17 +188,32 @@ class AuthService {
   Future<void> registerWithGoogle(String firstName, String lastName, String domain, String guestCode, String alarmCode, bool isAdmin, String address) async {
     try {
 
-      //TODO
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      await signInWithGoogle();
-      createUser(getUserEmail(), getUserUID(), null, firstName, lastName, domain, guestCode, alarmCode, isAdmin, address);
+      if (googleUser == null) {
+        throw const NoGoogleAccountChosenException();
+      }
+
+      await createUser(googleUser.email, googleUser.id, null, firstName, lastName, domain, guestCode, alarmCode, isAdmin, address);
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
     } on NoGoogleAccountChosenException {
       return;
-    } catch (e) {
-      errorMessage(e.toString());
-      await FirebaseAuth.instance.signOut();
-      await GoogleSignIn().signOut();
+    } on Exception {
+      return;
     }
   }
 

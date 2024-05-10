@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
+import 'package:omni_guardian/services/auth_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:omni_guardian/storage/storage.dart';
 
@@ -172,10 +173,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  bool _codeIsCorrect() {
-    return codeController.text == '1234';
-  }
-
   void _addCamera() {
     if(cameras.length < 5) {
       setState(() {
@@ -217,8 +214,8 @@ class _HomeState extends State<Home> {
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () {
-                if(_codeIsCorrect()) {
+              onPressed: () async {
+                if(await AuthService(context).codeIsCorrect(codeController.text)) {
                   if(isOn) {
                     setState(() {isOn = false;});
                   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 
 import '../../components/my_numberfield.dart';
+import '../../services/auth_service.dart';
 
 class Alarm extends StatefulWidget {
   Alarm({super.key});
@@ -70,8 +71,8 @@ class _AlarmState extends State<Alarm> {
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () {
-                if(_codeIsCorrect()) {
+              onPressed: () async {
+                if(await AuthService(context).codeIsCorrect(codeController.text)) {
                   if(isOn) {
                     setState(() {isOn = false;});
                   }
@@ -93,9 +94,5 @@ class _AlarmState extends State<Alarm> {
         );
       },
     );
-  }
-
-  bool _codeIsCorrect() {
-    return codeController.text == '1234';
   }
 }

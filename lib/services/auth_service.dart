@@ -221,6 +221,12 @@ class AuthService {
   String? getUserEmail() {
     return FirebaseAuth.instance.currentUser?.email;
   }
+
+  Future<bool> codeIsCorrect(String code) async {
+    Map<String, dynamic> user = await Storage.getUser();
+    String alarmCode = user['alarmCode'];
+    return code == alarmCode;
+  }
 }
 
 class NoGoogleAccountChosenException implements Exception {

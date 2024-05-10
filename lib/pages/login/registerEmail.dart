@@ -29,8 +29,6 @@ class _RegisterEmailState extends State<RegisterEmail> {
   bool isAdmin = false;
   String? selectedRole;
 
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -159,12 +157,8 @@ class _RegisterEmailState extends State<RegisterEmail> {
                 const SizedBox(height: 30),
 
                 //sign up button
-                isLoading? const CircularProgressIndicator():
                 MyButton(
                   onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
                     await AuthService(context).createUser(
                         email.text,
                         password.text,
@@ -177,9 +171,6 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         isAdmin,
                         domainAddress.text
                     );
-                    setState(() {
-                      isLoading = false;
-                    });
                   },
                   text: "Sign Up",
                 ),

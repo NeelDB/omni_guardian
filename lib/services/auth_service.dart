@@ -62,7 +62,7 @@ class AuthService {
 
       //If its google sign up confirm password will be null
       if(confirmPassword != null) {
-        registerUser(email, password);
+        await registerUser(email, password);
       }
 
     }

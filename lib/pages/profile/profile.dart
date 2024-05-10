@@ -63,7 +63,6 @@ class Profile extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              //const Text( getName(), style: TextStyle(fontWeight: FontWeight.bold)),
               FutureBuilder<String>(
                 future: getName(),
                 builder: (context, snapshot) {

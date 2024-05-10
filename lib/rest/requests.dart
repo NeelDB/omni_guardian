@@ -14,7 +14,7 @@ class Requests {
   //static const String _cameraHost = '192.168.1.147';
 
   // Home Server and Camera - Neel
-  static const String _serverHost = '192.168.1.4';
+  static const String _serverHost = '192.168.1.5';
   static const String _cameraHost = '192.168.1.147';
 
   // Remote Server and Camera - Bessa

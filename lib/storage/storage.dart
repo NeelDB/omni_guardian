@@ -69,13 +69,11 @@ class Storage {
 
   static Future<void> loadStorage(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(_alertData) == null && prefs.getString(_userData) == null) {
-      String? storageJson = await Requests.getStorage(email, password);
-      if(storageJson != null) {
-        Map<String, dynamic> storageData = jsonDecode(storageJson);
-        prefs.setString(_userData, jsonEncode(storageData['user']));
-        prefs.setString(_alertData, jsonEncode(storageData['alert']));
-      }
+    String? storageJson = await Requests.getStorage(email, password);
+    if(storageJson != null) {
+      Map<String, dynamic> storageData = jsonDecode(storageJson);
+      prefs.setString(_userData, jsonEncode(storageData['user']));
+      prefs.setString(_alertData, jsonEncode(storageData['alert']));
     }
   }
 

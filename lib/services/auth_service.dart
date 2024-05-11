@@ -125,15 +125,6 @@ class AuthService {
       );
 
       await Storage.loadStorage(email, password);
-
-      // TODO Test image
-      String? alertJson = await Requests.addAlert();
-      Map<String, dynamic> alert = jsonDecode(alertJson!);
-      Uint8List bytes = base64.decode(alert['imageBytes']);
-      debugPrint("Received timestamp: ${alert['timestamp']}");
-      debugPrint("Received bytes: $bytes");
-      await Storage.updateAlertStorage(alertJson);
-
     }
 
     on FirebaseAuthException catch (e) {

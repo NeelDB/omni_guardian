@@ -62,7 +62,7 @@ class Storage {
     return prefs.getString(_alertData) ?? '{}';
   }
 
-  static Future<Alert> getAlert() async {
+  static Future<Map<String, dynamic>> getAlert() async {
     return jsonDecode(await getAlertJson());
   }
 

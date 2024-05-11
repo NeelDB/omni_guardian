@@ -15,11 +15,6 @@ class Profile extends StatelessWidget {
     await GoogleSignIn().signOut();
   }
 
-  Future<String> getName() async {
-    Map<String, dynamic> user = await Storage.getUser();
-    String name = user['firstname'] + " " + user['lastname'];
-    return name;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +56,6 @@ class Profile extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 10),
-
-              FutureBuilder<String>(
-                future: getName(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(); // Display a loader while waiting for the result
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Text(snapshot.data ?? 'Richie Bessa', style: const TextStyle(fontWeight: FontWeight.bold));
-                  }
-                },
-              ),
               Text(AuthService(context).getUserEmail() ?? 'Teste'),
               
               const SizedBox(height: 20),

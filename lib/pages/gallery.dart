@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
+import 'package:omni_guardian/storage/storage.dart';
 
 class Gallery extends StatefulWidget {
   const Gallery({super.key});
@@ -11,12 +14,14 @@ class Gallery extends StatefulWidget {
 
 class _GalleryState extends State<Gallery> {
 
-  List<Map<String, String>> images = [
-    {
-      'img': 'https://example.com/image1.jpg',
-      'caption': 'Caption for Image 1',
-    },
-  ];
+  List<Map<String, dynamic>> images = [];
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    Map<String, dynamic> lastAlert = await Storage.getAlert();
+    images.add(lastAlert);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +32,7 @@ class _GalleryState extends State<Gallery> {
           'No images yet',
           style: TextStyle(fontSize: 18.0),
         ),
-      ) : SingleChildScrollView(
-            child: GridView.builder(
+      ) : GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 5.0,
@@ -42,14 +46,13 @@ class _GalleryState extends State<Gallery> {
                     // or navigating to another page.
                   },
                   child: Image.network(
-                    images[index][1]!,
+                    images[0]['imgBytes'],
                     fit: BoxFit.cover,
                   ),
                 );
               },
 
         ),
-      ),
     );
   }
 }

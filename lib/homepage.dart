@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omni_guardian/pages/alarm/alarm.dart';
-import 'package:omni_guardian/pages/gallery.dart';
+import 'package:omni_guardian/pages/gallery/gallery.dart';
 import 'package:omni_guardian/pages/home/home.dart';
 import 'package:omni_guardian/pages/login/login.dart';
 import 'package:omni_guardian/pages/login/login_or_register.dart';

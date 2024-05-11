@@ -55,10 +55,11 @@ class Profile extends StatelessWidget {
                   )
                 ],
               ),
+              const SizedBox(height: 10),
 
               Text(AuthService(context).getUserEmail() ?? 'Teste'),
               
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               
               SizedBox(
                 width: 200,

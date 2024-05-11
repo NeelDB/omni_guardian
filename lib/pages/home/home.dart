@@ -177,8 +177,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _takePicture() async {
-    String? alertJson = await Requests.addAlert();
-    //String? alertJson = await Requests.getDefaultAlert();
+    //String? alertJson = await Requests.addAlert();
+    String? alertJson = await Requests.getDefaultAlert();
     Map<String, dynamic> alert = jsonDecode(alertJson!);
     setState(() {
       bytes = base64.decode(alert['imageBytes']);

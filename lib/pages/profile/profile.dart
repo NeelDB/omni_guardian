@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
+import 'package:omni_guardian/pages/home/home.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 import 'package:omni_guardian/storage/storage.dart';
 import 'components/profile_menu_widgets.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
 
   // sign user out method
   Future<void> signUserOut() async {

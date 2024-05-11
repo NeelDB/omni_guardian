@@ -1,10 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:omni_guardian/storage/storage.dart';
+import '../../rest/requests.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -18,12 +21,7 @@ class _HomeState extends State<Home> {
   bool isOn = false;
   List<String> cameras = ['Camera 1'];
   final PageController _pageController = PageController();
-
-  Future<String> getDomainName() async {
-    Map<String, dynamic> user = await Storage.getUser();
-    String domain = user['domain'];
-    return domain;
-  }
+  Uint8List? bytes;
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +131,8 @@ class _HomeState extends State<Home> {
                                       )
                                   else
                                     ElevatedButton(
-                                      onPressed: () {
-                                        // Implement take picture functionality
+                                      onPressed: () async {
+                                        await _takePicture();
                                       },
                                       child: const Text('Take Picture'),
                                     ),
@@ -165,12 +163,32 @@ class _HomeState extends State<Home> {
                       )
                     ],
                   ),
-                )
+                ),
+
+                if (bytes != null) ...[
+                  const SizedBox(height: 25),
+                  Image.memory(bytes!),
+                  const SizedBox(height: 12),
               ],
-          ),
+          ]),
         ),
       )
     );
+  }
+
+  Future<void> _takePicture() async {
+    String? alertJson = await Requests.getDefaultAlert();
+    Map<String, dynamic> alert = jsonDecode(alertJson!);
+    setState(() {
+      bytes = base64.decode(alert['imageBytes']);
+    });
+    await Storage.updateAlertStorage(alertJson);
+  }
+
+  Future<String> getDomainName() async {
+    Map<String, dynamic> user = await Storage.getUser();
+    String domain = user['domain'];
+    return domain;
   }
 
   void _addCamera() {

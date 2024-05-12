@@ -8,6 +8,8 @@ import 'package:omni_guardian/pages/gallery/modal.dart';
 import 'package:omni_guardian/rest/requests.dart';
 import 'package:omni_guardian/storage/storage.dart';
 
+import '../../data/alert.dart';
+
 class Gallery extends StatefulWidget {
   const Gallery({super.key});
 
@@ -22,21 +24,52 @@ class _GalleryState extends State<Gallery> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
+    images = []; // clean memory
+
+    await getLastAlert();
+    //await listAlerts("ALL");
+  }
+
+  Future<void> getLastAlert() async {
+    //Map<String, dynamic> alert = await Storage.getAlert();
+
     String? alertJson = await Requests.getDefaultAlert();
     Map<String, dynamic> alert = jsonDecode(alertJson!);
+
     Uint8List bytes = base64.decode(alert['imageBytes']);
     String caption = alert['timestamp'];
     Data img = Data(image: bytes, text: caption);
     images.add(img);
-    images.add(img);
-    images.add(img);
-    images.add(img);
-    images.add(img);
-    images.add(img);
-    images.add(img);
-    images.add(img);
-
   }
+
+  Future<void> listAlerts(String query) async {
+    Map<String, dynamic> user = await Storage.getUser();
+    String? alerts;
+
+    if(query == "ALL") {
+      alerts = await Requests.getAlerts(user['email'], user['authorizationToken']);
+    }
+    else if(query == "POSITIVE") {
+      alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
+    }
+    else if(query == "FALSE") {
+      alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
+    }
+    else if(query == "LAST") {
+      alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
+    }
+
+    List<dynamic> alertList = jsonDecode(alerts!);
+    for(dynamic alert in alertList) {
+      Uint8List bytes = base64.decode(alert['imageBytes']);
+      String caption = alert['timestamp'];
+      debugPrint(caption);
+      Data img = Data(image: bytes, text: caption);
+      images.add(img);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

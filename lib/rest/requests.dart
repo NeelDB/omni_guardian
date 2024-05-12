@@ -10,12 +10,12 @@ import '../data/User.dart';
 class Requests {
 
   // Home Server and Camera - Bessa
-  //static const String _serverHost = '192.168.1.74';
-  //static const String _cameraHost = '192.168.1.147';
+  static const String _serverHost = '192.168.1.74';
+  static const String _cameraHost = '192.168.1.147';
 
   // Home Server and Camera - Neel
-  static const String _serverHost = '192.168.1.5';
-  static const String _cameraHost = '192.168.1.147';
+  //static const String _serverHost = '192.168.1.5';
+  //static const String _cameraHost = '192.168.1.147';
 
   // Remote Server and Camera - Bessa
   //static const String _serverHost = '192.168.113.237';
@@ -54,6 +54,15 @@ class Requests {
 
   static const String _getDefaultAlertEndpoint = '/getDefaultAlert';
   static const String _getDefaultAlertURI = _serverBaseURI + _getDefaultAlertEndpoint;
+
+  static const String _getAlertsEndpoint = '/getAlerts';
+  static const String _getAlertsURI = _serverBaseURI + _getAlertsEndpoint;
+
+  static const String _getPositiveAlertsEndpoint = '/getPositiveAlerts';
+  static const String _getPositiveAlertsURI = _serverBaseURI + _getPositiveAlertsEndpoint;
+
+  static const String _getFalseAlertsEndpoint = '/getFalseAlerts';
+  static const String _getFalseAlertsURI = _serverBaseURI + _getFalseAlertsEndpoint;
 
   static const int _ok = 200;
   static const int _forbidden = 403;
@@ -183,6 +192,48 @@ class Requests {
       return response.body;
     } else if (response.statusCode == _forbidden) {
       debugPrint("Incorrect password!");
+    }
+
+    return null;
+  }
+
+  static Future<String?> getAlerts(String email, String token) async {
+    final response = await _client.get(
+        Uri.parse("$_getAlertsURI/$email?token=$token"));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+      return response.body;
+    } else if (response.statusCode == _forbidden) {
+      debugPrint("Incorrect token!");
+    }
+
+    return null;
+  }
+
+  static Future<String?> getPositiveAlerts(String email, String token) async {
+    final response = await _client.get(
+        Uri.parse("$_getPositiveAlertsURI/$email?token=$token"));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+      return response.body;
+    } else if (response.statusCode == _forbidden) {
+      debugPrint("Incorrect token!");
+    }
+
+    return null;
+  }
+
+  static Future<String?> getFalseAlerts(String email, String token) async {
+    final response = await _client.get(
+        Uri.parse("$_getFalseAlertsURI/$email?token=$token"));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+      return response.body;
+    } else if (response.statusCode == _forbidden) {
+      debugPrint("Incorrect token!");
     }
 
     return null;

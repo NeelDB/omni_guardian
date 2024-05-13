@@ -46,6 +46,9 @@ class Requests {
   static const String _getUserEndpoint = '/getUser';
   static const String _getUserURI = _serverBaseURI + _getUserEndpoint;
 
+  static const String _getUserVerificationEndpoint = '/getUserVerification';
+  static const String _getUserVerificationURI = _serverBaseURI + _getUserVerificationEndpoint;
+
   static const String _getLastAlertEndpoint = '/getLastAlert';
   static const String _getLastAlertURI = _serverBaseURI + _getLastAlertEndpoint;
 
@@ -152,6 +155,19 @@ class Requests {
     }
 
     return null;
+  }
+
+
+  static Future<void> getUserVerification(String email, String password) async {
+    final response = await _client.get(Uri.parse("$_getUserVerificationURI/$email?password=$password"));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+    } else if(response.statusCode == _forbidden) {
+      debugPrint("Incorrect password!");
+    } else if(response.statusCode == -_notFound) {
+      debugPrint("User not found!");
+    }
   }
 
 

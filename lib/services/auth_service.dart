@@ -12,6 +12,7 @@ import 'package:omni_guardian/storage/storage.dart';
 import '../data/Camera.dart';
 import '../data/User.dart' as data;
 import '../data/domain.dart';
+import '../network/bluetooth.dart';
 
 class AuthService {
 

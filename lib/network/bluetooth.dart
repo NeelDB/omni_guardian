@@ -30,25 +30,9 @@ class Bluetooth {
       debugPrint(res.device.name);
     }
 
-    /*BluetoothConnection connection = await BluetoothConnection.toAddress(deviceMap.keys.first);
-    connection.output.add(utf8.encode("Home"));
-    await connection.output.allSent;
-
-    List<int> data = [];
-    connection.input?.listen((List<int> data) {
-      data.addAll(data);
-    });
-
-    //await Future.delayed(const Duration(seconds: 5));
-
-    List<String> deviceData = utf8.decode(data).split(" ");
-    String deviceID = deviceData[0];
-    String deviceIP = deviceData[1];
-    debugPrint("DEVICE ID:$deviceID");
-    debugPrint("DEVICE IP:$deviceIP");
-
-    await connection.close();*/
-    //TODO loading and context location bluetooth message
+    BluetoothConnection connection = await BluetoothConnection.toAddress(deviceMap.keys.first);
+    await Future.delayed(const Duration(seconds: 2));
+    await connection.close();
 
   }
 

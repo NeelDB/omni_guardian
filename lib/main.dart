@@ -3,6 +3,7 @@ import 'package:omni_guardian/pages/auth_page.dart';
 import 'package:omni_guardian/rest/mobile_server.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'network/bluetooth.dart';
 
 
 void main() async {

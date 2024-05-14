@@ -161,12 +161,10 @@ class Requests {
   static Future<void> getUserVerification(String email, String password) async {
     final response = await _client.get(Uri.parse("$_getUserVerificationURI/$email?password=$password"));
 
-    if (response.statusCode == _ok) {
-      debugPrint(response.body);
-    } else if(response.statusCode == _forbidden) {
-      debugPrint("Incorrect password!");
+    if(response.statusCode == _forbidden) {
+      throw Exception("Incorrect password!");
     } else if(response.statusCode == -_notFound) {
-      debugPrint("User not found!");
+      throw Exception("User not found!");
     }
   }
 

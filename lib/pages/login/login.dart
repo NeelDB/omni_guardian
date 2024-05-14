@@ -94,16 +94,20 @@ class _LoginState extends State<Login> {
               isLoading? const CircularProgressIndicator() :
               MyButton(
                 onTap: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                  }
                   await AuthService(context).signUserIn(
                     emailController.text,
                     password.text,
                   );
-                  setState(() {
-                    isLoading = false;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
                 },
                 text: "Sign In",
               ),

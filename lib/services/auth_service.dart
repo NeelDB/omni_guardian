@@ -152,6 +152,14 @@ class AuthService {
       throw const NoGoogleAccountChosenException();
     }
 
+    try {
+      await Requests.getUserVerification(googleUser.email, googleUser.id);
+    }
+
+    on Exception catch(e) {
+      errorMessage(e.toString());
+    }
+
     await Storage.loadStorage(googleUser.email, googleUser.id);
 
     // Obtain the auth details from the request

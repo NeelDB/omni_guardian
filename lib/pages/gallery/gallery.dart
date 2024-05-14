@@ -26,15 +26,15 @@ class _GalleryState extends State<Gallery> {
     super.didChangeDependencies();
     images = []; // clean memory
 
-    await getLastAlert();
-    //await listAlerts("ALL");
+    //await getLastAlert();
+    await listAlerts("ALL");
   }
 
   Future<void> getLastAlert() async {
-    //Map<String, dynamic> alert = await Storage.getAlert();
+    Map<String, dynamic> alert = await Storage.getAlert();
 
-    String? alertJson = await Requests.getDefaultAlert();
-    Map<String, dynamic> alert = jsonDecode(alertJson!);
+    //String? alertJson = await Requests.getDefaultAlert();
+    //Map<String, dynamic> alert = jsonDecode(alertJson!);
 
     Uint8List bytes = base64.decode(alert['imageBytes']);
     String caption = alert['timestamp'];
@@ -56,7 +56,7 @@ class _GalleryState extends State<Gallery> {
       alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
     }
     else if(query == "LAST") {
-      alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
+      return await getLastAlert();
     }
 
     List<dynamic> alertList = jsonDecode(alerts!);
@@ -81,40 +81,48 @@ class _GalleryState extends State<Gallery> {
           style: TextStyle(fontSize: 18.0),
         ),
       ) : GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 5.0,
-              ),
-              itemCount: images.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    // You can add onTap functionality here, like showing full-size image
-                    // or navigating to another page.
-                  },
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 165,
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            image: DecorationImage(
-                              image: MemoryImage(images[index].image),
-                              fit: BoxFit.cover
-                            )
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(images[index].text)
-                    ],
-                  )
-                );
-              },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 5.0,
+          crossAxisSpacing: 5.0,
         ),
+        itemCount: images.length,
+        itemBuilder: (context, index) {
+          // Calculate the width of each grid item based on the screen width
+          double itemWidth = MediaQuery.of(context).size.width / 2 ; // Subtracting spacing
+
+          return GestureDetector(
+            onTap: () {
+              // You can add onTap functionality here, like showing full-size image
+              // or navigating to another page.
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: itemWidth,
+                  height: itemWidth * 0.75, // Aspect ratio of 4:3
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    image: DecorationImage(
+                      image: MemoryImage(images[index].image),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Text(
+                    images[index].text,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      )
     );
   }
 }

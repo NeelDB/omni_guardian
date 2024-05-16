@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/pages/gallery/modal.dart';
@@ -20,15 +18,7 @@ class Gallery extends StatefulWidget {
 class _GalleryState extends State<Gallery> {
 
   List<Data> images = [];
-
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    images = []; // clean memory
-
-    //await getLastAlert();
-    await listAlerts("ALL");
-  }
+  String? selectedFilter = 'ALL';
 
   Future<void> getLastAlert() async {
     Map<String, dynamic> alert = await Storage.getAlert();
@@ -69,60 +59,90 @@ class _GalleryState extends State<Gallery> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar('Gallery'),
-      body: images.isEmpty? const Center(
-        child: Text(
-          'No images yet',
-          style: TextStyle(fontSize: 18.0),
-        ),
-      ) : GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 5.0,
-          crossAxisSpacing: 5.0,
-        ),
-        itemCount: images.length,
-        itemBuilder: (context, index) {
-          // Calculate the width of each grid item based on the screen width
-          double itemWidth = MediaQuery.of(context).size.width / 2 ; // Subtracting spacing
-
-          return GestureDetector(
-            onTap: () {
-              // You can add onTap functionality here, like showing full-size image
-              // or navigating to another page.
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: itemWidth,
-                  height: itemWidth * 0.75, // Aspect ratio of 4:3
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    image: DecorationImage(
-                      image: MemoryImage(images[index].image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Text(
-                    images[index].text,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
-              ],
+      body: images.isEmpty?
+        const Center(
+          child: Text(
+            'No images yet',
+            style: TextStyle(fontSize: 18.0),
+          ),
+        )
+          : Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(25),
+            child: DropdownButtonFormField<String>(
+              value: selectedFilter,
+              hint: const Text('Select Filter'),
+              decoration: const InputDecoration(
+                labelText: 'See:',
+                border: OutlineInputBorder(),
+                filled: true,
+              ),
+              onChanged: (value) async {
+                await listAlerts(value!);
+              },
+              items: ['ALL', 'POSITIVE', 'FALSE', 'LAST'].map((role) {
+                return DropdownMenuItem<String>(
+                  value: role,
+                  child: Text(role),
+                );
+              }).toList(),
             ),
-          );
-        },
-      )
+          ),
+
+          const SizedBox(height: 15),
+
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 5.0,
+                crossAxisSpacing: 5.0,
+              ),
+              itemCount: images.length,
+              itemBuilder: (context, index) {
+                // Calculate the width of each grid item based on the screen width
+                double itemWidth = MediaQuery.of(context).size.width / 2; // Subtracting spacing
+
+                return GestureDetector(
+                  onTap: () {
+                    // You can add onTap functionality here, like showing full-size image
+                    // or navigating to another page.
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: itemWidth,
+                        height: itemWidth * 0.75, // Aspect ratio of 4:3
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          image: DecorationImage(
+                            image: MemoryImage(images[index].image),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Text(
+                          images[index].text,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

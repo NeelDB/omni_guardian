@@ -10,8 +10,8 @@ import '../data/User.dart';
 class Requests {
 
   // Home Server and Camera - Bessa
-  static const String _serverHost = '192.168.1.74';
-  static const String _cameraHost = '192.168.1.147';
+  //static const String _serverHost = '192.168.1.74';
+  //static const String _cameraHost = '192.168.1.147';
 
   // Home Server and Camera - Neel
   //static const String _serverHost = '192.168.1.5';
@@ -22,8 +22,8 @@ class Requests {
   //static const String _cameraHost = '192.168.113.196';
 
   // Remote Server and Camera - Neel
-  //static const String _serverHost = '192.168.155.194';
-  //static const String _cameraHost = '192.168.105.196';
+  static const String _serverHost = '172.29.80.1';
+  static const String _cameraHost = '192.168.105.196';
 
   static const int _serverPort = 8080;
   static const int _cameraPort = 80;

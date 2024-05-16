@@ -21,20 +21,25 @@ class _GalleryState extends State<Gallery> {
   String? selectedFilter = 'ALL';
 
   Future<void> getLastAlert() async {
-    Map<String, dynamic> alert = await Storage.getAlert();
+    //Map<String, dynamic> alert = await Storage.getAlert();
 
-    //String? alertJson = await Requests.getDefaultAlert();
-    //Map<String, dynamic> alert = jsonDecode(alertJson!);
+    String? alertJson = await Requests.getDefaultAlert();
+    Map<String, dynamic> alert = jsonDecode(alertJson!);
 
     Uint8List bytes = base64.decode(alert['imageBytes']);
     String caption = alert['timestamp'];
     Data img = Data(image: bytes, text: caption);
-    images.add(img);
+    setState(() {
+      images.add(img);
+    });
   }
 
   Future<void> listAlerts(String query) async {
     Map<String, dynamic> user = await Storage.getUser();
     String? alerts;
+    setState(() {
+      images.clear();
+    });
 
     if(query == "ALL") {
       alerts = await Requests.getAlerts(user['email'], user['authorizationToken']);
@@ -55,7 +60,9 @@ class _GalleryState extends State<Gallery> {
       String caption = alert['timestamp'];
       debugPrint(caption);
       Data img = Data(image: bytes, text: caption);
-      images.add(img);
+      setState(() {
+        images.add(img);
+      });
     }
   }
 
@@ -63,14 +70,7 @@ class _GalleryState extends State<Gallery> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar('Gallery'),
-      body: images.isEmpty?
-        const Center(
-          child: Text(
-            'No images yet',
-            style: TextStyle(fontSize: 18.0),
-          ),
-        )
-          : Column(
+      body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(25),
@@ -94,6 +94,16 @@ class _GalleryState extends State<Gallery> {
             ),
           ),
 
+          images.isEmpty?
+          const Expanded(
+            child: Center(
+              child: Text(
+                'No images yet',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ),
+          )
+              :
           const SizedBox(height: 15),
 
           Expanded(

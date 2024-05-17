@@ -48,6 +48,7 @@ class AuthService {
           Domain(domain, [cam1, cam2], [admin], _defaultAlertList, address, guestCode, alarmCode, _defaultToken);
 
         userJson = await Requests.addAdmin(newDomain);
+        //TODO await Requests.createDomain(domain);
       }
 
       else {

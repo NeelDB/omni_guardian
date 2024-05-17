@@ -38,6 +38,9 @@ class Requests {
   static const String _cancelAlarmEndpoint = '/cancelAlarm';
   static const String _cancelAlarmURI = _cameraBaseURI + _cancelAlarmEndpoint;
 
+  static const String _createDomainEndpoint = '/createDomain';
+  static const String _createDomainURI = _cameraBaseURI + _createDomainEndpoint;
+
   static const String _addAdminEndpoint = '/addAdmin';
   static const String _addAdminURI = _serverBaseURI + _addAdminEndpoint;
 
@@ -135,7 +138,15 @@ class Requests {
   }
 
   static Future<void> cancelAlarm() async {
-    final response = await _client.get(Uri.parse(_cancelAlarmURI));
+    final response = await _client.put(Uri.parse(_cancelAlarmURI));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+    }
+  }
+
+  static Future<void> createDomain(String domain) async {
+    final response = await _client.put(Uri.parse("$_createDomainURI/$domain"));
 
     if (response.statusCode == _ok) {
       debugPrint(response.body);

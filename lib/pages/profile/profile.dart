@@ -14,20 +14,28 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String name = "NULL";
+  String? name;
+
+  @override
+  void initState() {
+    super.initState();
+    getName().then((result) {
+      setState(() {
+        name = result;
+      });
+    });
+  }
+
+  Future<String> getName() async {
+    Map<String, dynamic> user = await Storage.getUser();
+    String username = user['firstname'] + " " + user['lastname'];
+    return username;
+  }
 
   // sign user out method
   Future<void> signUserOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-  }
-
-  Future<void> getName() async {
-    Map<String, dynamic> user = await Storage.getUser();
-
-    setState(() {
-      name = user['firstname'] + " " + user['lastname'];
-    });
   }
 
   @override
@@ -71,14 +79,7 @@ class _ProfileState extends State<Profile> {
               ),
               const SizedBox(height: 10),
 
-              FutureBuilder<void>(
-                future: getName(),
-                builder: (context, snapshot) {
-                  return Text(name, style: const TextStyle(fontWeight: FontWeight.bold));
-                },
-              ),
-
-              const SizedBox(height: 10),
+              Text(name ?? "Loading...", style: const TextStyle(fontWeight: FontWeight.bold)),
 
               Text(AuthService(context).getUserEmail() ?? 'Teste'),
 

@@ -29,10 +29,14 @@ class Requests {
   static const int _cameraPort = 80;
 
   static const String _service = 'omniguardian-server';
-  static const String _cameraService = 'capture';
-
   static const String _serverBaseURI = 'http://$_serverHost:$_serverPort/$_service';
-  static const String _cameraBaseURI = 'http://$_cameraHost:$_cameraPort/$_cameraService';
+  static const String _cameraBaseURI = 'http://$_cameraHost:$_cameraPort';
+
+  static const String _addAlertEndpoint = '/capture';
+  static const String _addAlertURI = _cameraBaseURI + _addAlertEndpoint;
+
+  static const String _cancelAlarmEndpoint = '/cancelAlarm';
+  static const String _cancelAlarmURI = _cameraBaseURI + _cancelAlarmEndpoint;
 
   static const String _addAdminEndpoint = '/addAdmin';
   static const String _addAdminURI = _serverBaseURI + _addAdminEndpoint;
@@ -120,7 +124,7 @@ class Requests {
   }
 
   static Future<String?> addAlert() async {
-    final response = await _client.get(Uri.parse(_cameraBaseURI));
+    final response = await _client.get(Uri.parse(_addAlertURI));
 
     if (response.statusCode == _ok) {
       debugPrint(response.body);
@@ -128,6 +132,14 @@ class Requests {
     }
 
     return null;
+  }
+
+  static Future<void> cancelAlarm() async {
+    final response = await _client.get(Uri.parse(_cancelAlarmURI));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+    }
   }
 
 

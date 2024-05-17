@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
   List<String> cameras = ['Camera 1'];
   final PageController _pageController = PageController();
   Uint8List? bytes;
+  String domainName = "NULL";
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +32,10 @@ class _HomeState extends State<Home> {
         child: Center(
           child: Column(
               children: [
-                FutureBuilder<String>(
+                FutureBuilder<void>(
                   future: getDomainName(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); // Display a loader while waiting for the result
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      return Text(snapshot.data ?? 'Domain Name', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
-                    }
+                      return Text(domainName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
                   },
                 ),
 
@@ -186,10 +181,12 @@ class _HomeState extends State<Home> {
     await Storage.updateAlertStorage(alertJson);
   }
 
-  Future<String> getDomainName() async {
+  Future<void> getDomainName() async {
     Map<String, dynamic> user = await Storage.getUser();
-    String domain = user['domain'];
-    return domain;
+
+    setState(() {
+      domainName = user['domain'];
+    });
   }
 
   void _addCamera() {

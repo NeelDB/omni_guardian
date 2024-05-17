@@ -7,7 +7,14 @@ import 'package:omni_guardian/services/auth_service.dart';
 import 'package:omni_guardian/storage/storage.dart';
 import 'components/profile_menu_widgets.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String name = "NULL";
 
   // sign user out method
   Future<void> signUserOut() async {
@@ -15,6 +22,13 @@ class Profile extends StatelessWidget {
     await GoogleSignIn().signOut();
   }
 
+  Future<void> getName() async {
+    Map<String, dynamic> user = await Storage.getUser();
+
+    setState(() {
+      name = user['firstname'] + " " + user['lastname'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +37,7 @@ class Profile extends StatelessWidget {
 
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(25),
           child: Column(
             children: [
               Stack(
@@ -57,10 +71,19 @@ class Profile extends StatelessWidget {
               ),
               const SizedBox(height: 10),
 
+              FutureBuilder<void>(
+                future: getName(),
+                builder: (context, snapshot) {
+                  return Text(name, style: const TextStyle(fontWeight: FontWeight.bold));
+                },
+              ),
+
+              const SizedBox(height: 10),
+
               Text(AuthService(context).getUserEmail() ?? 'Teste'),
-              
-              const SizedBox(height: 15),
-              
+
+              const SizedBox(height: 10),
+
               SizedBox(
                 width: 200,
                 child: ElevatedButton(onPressed: (){}, child: const Text('Edit Profile'))

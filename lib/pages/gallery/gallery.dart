@@ -21,10 +21,10 @@ class _GalleryState extends State<Gallery> {
   String? selectedFilter = 'ALL';
 
   Future<void> getLastAlert() async {
-    //Map<String, dynamic> alert = await Storage.getAlert();
+    Map<String, dynamic> alert = await Storage.getAlert();
 
-    String? alertJson = await Requests.getDefaultAlert();
-    Map<String, dynamic> alert = jsonDecode(alertJson!);
+    //String? alertJson = await Requests.getDefaultAlert();
+    //Map<String, dynamic> alert = jsonDecode(alertJson!);
 
     Uint8List bytes = base64.decode(alert['imageBytes']);
     String caption = alert['timestamp'];
@@ -48,7 +48,7 @@ class _GalleryState extends State<Gallery> {
       alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
     }
     else if(query == "FALSE") {
-      alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
+      alerts = await Requests.getFalseAlerts(user['email'], user['authorizationToken']);
     }
     else if(query == "LAST") {
       return await getLastAlert();

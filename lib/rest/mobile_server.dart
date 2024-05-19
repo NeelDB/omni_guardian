@@ -11,6 +11,7 @@ class MobileServer {
   static const String _alertService = '/processAlert';
   static const String _msgOK = 'Received photo!';
   static HttpServer? _server;
+  static int countPassiveAlerts = 0;
 
   static Future<void> startServer() async {
     final router = Router();
@@ -41,10 +42,30 @@ class MobileServer {
   static Future<Response> _handleRequest(Request request) async {
     String alertJson = await request.readAsString();
     Map<String, dynamic> alert = jsonDecode(alertJson);
-    Uint8List bytes = base64.decode(alert['imageBytes']);
-    print("Received PIR timestamp: ${alert['timestamp']}");
-    print("Received PIR bytes: $bytes");
-    await Storage.updateAlertStorage(alertJson);
+
+    if(alert['imageBytes'].toString().isEmpty) {
+      countPassiveAlerts++;
+
+      if(countPassiveAlerts == 2) {
+        print("Not seeing you around for a while, one more alert and the alarm will become active!");
+      }
+      else if(countPassiveAlerts == 3) {
+        print("Looks like you forgot to turned on the alarm, so it's about to become active right now!");
+        countPassiveAlerts = 0;
+      }
+      else {
+        print("Not seeing you around, if you're gonna sleep don't forget to turn on the alarm!");
+      }
+    }
+
+    else {
+      Uint8List bytes = base64.decode(alert['imageBytes']);
+      print("Received Alert!");
+      print("Received PIR timestamp: ${alert['timestamp']}");
+      print("Received PIR bytes: $bytes");
+      await Storage.updateAlertStorage(alertJson);
+    }
+
     return Response.ok(_msgOK);
   }
 

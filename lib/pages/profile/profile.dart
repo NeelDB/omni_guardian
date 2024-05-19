@@ -28,8 +28,8 @@ class _ProfileState extends State<Profile> {
 
   Future<String> getName() async {
     Map<String, dynamic> user = await Storage.getUser();
-    String username = user['firstname'] + " " + user['lastname'];
-    return username;
+    print(user['firstname'] + " " + user['lastname']);
+    return user['firstname'] + " " + user['lastname'];
   }
 
   // sign user out method

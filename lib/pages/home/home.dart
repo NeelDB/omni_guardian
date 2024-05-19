@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/services/auth_service.dart';
+import 'package:omni_guardian/services/notif_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:omni_guardian/storage/storage.dart';
 import '../../rest/requests.dart';
@@ -38,7 +39,9 @@ class _HomeState extends State<Home> {
 
                 //Turn System on/off
                 ElevatedButton.icon(
-                    onPressed: () {_showCodeInputDialog(context);},
+                    onPressed: () {
+                      _showCodeInputDialog(context);
+                      },
                     icon: isOn? const Icon(Icons.cancel) : const Icon(Icons.power_settings_new, size: 40),
                     label: isOn? const Text('Turn off') : const Text('Turn on'),
                     style: ElevatedButton.styleFrom(
@@ -188,8 +191,7 @@ class _HomeState extends State<Home> {
 
   Future<String> getDomainName() async {
     Map<String, dynamic> user = await Storage.getUser();
-    String domain = user['domain'];
-    return domain;
+    return user['domain'];
   }
 
   void _addCamera() {

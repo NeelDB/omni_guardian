@@ -3,12 +3,14 @@ import 'package:omni_guardian/network/networkListener.dart';
 import 'package:omni_guardian/pages/auth_page.dart';
 import 'package:omni_guardian/rest/mobile_server.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:omni_guardian/services/notif_service.dart';
 import 'firebase_options.dart';
 import 'network/bluetooth.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );

@@ -16,7 +16,7 @@ void main() async {
   await MobileServer.startServer();
   runApp(const MyApp());
   //await Bluetooth.scanForDevices();
-  await NetworkListener.initListener();
+  //await NetworkListener.initListener();
 }
 
 class MyApp extends StatelessWidget {

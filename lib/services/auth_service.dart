@@ -116,12 +116,12 @@ class AuthService {
 
   Future<void> signUserIn(String email, String password) async {
     try {
+      await Storage.loadStorage(email, password);
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      await Storage.loadStorage(email, password);
     }
 
     on FirebaseAuthException catch (e) {

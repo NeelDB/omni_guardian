@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/services/auth_service.dart';
-import 'package:omni_guardian/services/notif_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:omni_guardian/storage/storage.dart';
 import '../../rest/requests.dart';

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:omni_guardian/network/networkListener.dart';
 import 'package:omni_guardian/pages/auth_page.dart';
 import 'package:omni_guardian/rest/mobile_server.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:omni_guardian/storage/storage.dart';
 import 'firebase_options.dart';
 import 'network/bluetooth.dart';
 
@@ -12,8 +14,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform
   );
   await MobileServer.startServer();
-  //await Bluetooth.scanForDevices();
   runApp(const MyApp());
+  //await Bluetooth.scanForDevices();
+  await NetworkListener.initListener();
 }
 
 class MyApp extends StatelessWidget {

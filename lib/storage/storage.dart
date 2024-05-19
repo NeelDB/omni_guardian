@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:omni_guardian/rest/requests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../data/alert.dart';
 
 
 class Storage {
 
   static const String _userData = 'userData';
   static const String _alertData = 'alertData';
+
+  static const String _rfidData = 'rfidData';
+  static const String _rfidUid = 'rfidData';
 
   static Future<void> updateUserStorage(String userJson) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -75,6 +75,17 @@ class Storage {
       prefs.setString(_userData, jsonEncode(storageData['user']));
       prefs.setString(_alertData, jsonEncode(storageData['alert']));
     }
+  }
+
+
+  static Future<void> storeRFID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(_rfidData, _rfidUid);
+  }
+
+  static Future<String> getRFID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_rfidData) ?? '{}';
   }
 
 }

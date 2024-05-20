@@ -5,6 +5,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:omni_guardian/storage/storage.dart';
 import '../network/wifi.dart';
+import '../services/notif_service.dart';
 
 class MobileServer {
   static const int _serverPort = 3000;
@@ -48,19 +49,35 @@ class MobileServer {
 
       if(countPassiveAlerts == 2) {
         print("Not seeing you around for a while, one more alert and the alarm will become active!");
+        NotificationService().showNotification(
+            title: "One more alert!",
+            body: "Not seeing you around for a while, one more alert and the alarm will become active!"
+        );
       }
       else if(countPassiveAlerts == 3) {
         print("Looks like you forgot to turned on the alarm, so it's about to become active right now!");
+        NotificationService().showNotification(
+            title: "Alarm about to activate",
+            body: "Looks like you forgot to turned on the alarm, so it's about to become active right now!"
+        );
         countPassiveAlerts = 0;
       }
       else {
         print("Not seeing you around, if you're gonna sleep don't forget to turn on the alarm!");
+        NotificationService().showNotification(
+            title: "Not seeing you around",
+            body: "If you're gonna sleep don't forget to turn on the alarm!"
+        );
       }
     }
 
     else {
       Uint8List bytes = base64.decode(alert['imageBytes']);
       print("Received Alert!");
+      NotificationService().showNotification(
+          title: "Received Alert!",
+          body: "Check out the alert"
+      );
       print("Received PIR timestamp: ${alert['timestamp']}");
       print("Received PIR bytes: $bytes");
       await Storage.updateAlertStorage(alertJson);

@@ -22,6 +22,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.primaryColor,
       body: SafeArea( //Safe Area makes the UI avoid the corners and notch of the screen
         child: SingleChildScrollView(
           child: Column(

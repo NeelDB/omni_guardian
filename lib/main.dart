@@ -4,6 +4,9 @@ import 'package:omni_guardian/pages/auth_page.dart';
 import 'package:omni_guardian/rest/mobile_server.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:omni_guardian/services/notif_service.dart';
+import 'package:omni_guardian/theme/theme.dart';
+import 'package:omni_guardian/theme/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'colors.dart';
 import 'firebase_options.dart';
 import 'network/bluetooth.dart';
@@ -15,7 +18,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp()
+      )
+  );
   await NetworkListener.initListener();
   //await Bluetooth.scanForDevices();
 
@@ -28,29 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.light, // Background color
-        primaryColor: Color.fromRGBO(4, 18, 36, 1), // Primary color
-        //hintColor: Color.fromRGBO(84, 117, 167, 1),
-
-        colorScheme: const ColorScheme(
-          background: Color(0xFFA0B9E1), // Background color
-          primary: Color.fromRGBO(4, 18, 36, 1), // A darker version of the primary color
-          secondary: Color.fromRGBO(232, 237, 241, 1), // A darker version of the secondary color
-          surface: Color.fromRGBO(232, 237, 241, 1), // Surface color
-          onBackground: Color.fromRGBO(4, 18, 36, 1), // On background color
-          onPrimary: Color.fromRGBO(232, 237, 241, 1), // On primary color
-          onSecondary: Color.fromRGBO(4, 18, 36, 1), // On secondary color
-          onError: Colors.red, // Error color
-          onSurface: Color.fromRGBO(4, 18, 36, 1), // On surface color
-          error: Colors.red, // Error color
-          brightness: Brightness.light,
-        ),// Third color as accent
-
-
-
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       debugShowCheckedModeBanner: false,
       home: const AuthPage()
     );

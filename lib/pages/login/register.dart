@@ -35,6 +35,7 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.primaryColor,
       body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -5,6 +5,8 @@ import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/pages/home/home.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 import 'package:omni_guardian/storage/storage.dart';
+import 'package:omni_guardian/theme/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'components/profile_menu_widgets.dart';
 
 class Profile extends StatefulWidget {
@@ -103,9 +105,11 @@ class _ProfileState extends State<Profile> {
                 ),
 
               ProfileMenuWidget(
-                  title: 'Notifications',
-                  icon: Icons.email,
-                  onPress: (){}
+                  title: 'Switch Theme',
+                  icon: Icons.lightbulb,
+                  onPress: (){
+                    Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                  }
               ),
 
               ProfileMenuWidget(

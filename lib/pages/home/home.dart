@@ -32,13 +32,15 @@ class _HomeState extends State<Home> {
         child: Center(
           child: Column(
               children: [
+                const SizedBox(height: 20),
+
                   Text(
                     isAdmin ? "Admin - $domainName" :
                     "Guest - $domainName",
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
 
                 //Turn System on/off
                 ElevatedButton.icon(
@@ -51,7 +53,6 @@ class _HomeState extends State<Home> {
                       backgroundColor: isOn? Colors.red : Colors.green,
                       foregroundColor: Colors.white,
                       fixedSize: const Size(300, 80),
-                      //side: const BorderSide(color: Colors.black, width: 2),
                       shape: const RoundedRectangleBorder(),
                       textStyle: const TextStyle(
                         fontSize: 30,
@@ -69,8 +70,6 @@ class _HomeState extends State<Home> {
                       icon: const Icon(Icons.add),
                       label: const Text('Add Camera'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.indigo,
-                        foregroundColor: Colors.white,
                         fixedSize: const Size(300, 40),
                         //side: const BorderSide(color: Colors.black, width: 2),
                         shape: const RoundedRectangleBorder(),
@@ -85,7 +84,7 @@ class _HomeState extends State<Home> {
                   height: 200,
                   width: 300,
                   decoration: const BoxDecoration(
-                      color: Colors.greenAccent
+                      color: Colors.white
                   ),
                   child: Stack(
                     children: [

@@ -15,21 +15,21 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String? name;
+  bool isAdmin = false;
 
   @override
   void initState() {
     super.initState();
-    getName().then((result) {
-      setState(() {
-        name = result;
-      });
-    });
+    getUserDetails();
   }
 
-  Future<String> getName() async {
+  Future<void> getUserDetails() async {
     Map<String, dynamic> user = await Storage.getUser();
-    print(user['firstname'] + " " + user['lastname']);
-    return user['firstname'] + " " + user['lastname'];
+    setState(() {
+      name = user['firstname'] + " " + user['lastname'];
+      isAdmin = user['admin'];
+    });
+
   }
 
   // sign user out method
@@ -95,11 +95,12 @@ class _ProfileState extends State<Profile> {
               const SizedBox(height: 10),
 
               // MENU
-              ProfileMenuWidget(
-                title: 'Settings',
-                icon: Icons.settings,
-                onPress: (){}
-              ),
+              if(isAdmin)
+                ProfileMenuWidget(
+                    title: 'Domain Settings',
+                    icon: Icons.settings,
+                    onPress: (){}
+                ),
 
               ProfileMenuWidget(
                   title: 'Notifications',

@@ -42,8 +42,8 @@ class NotificationService {
     NotificationDetails(android: androidPlatformChannelSpecifics);
     await notificationsPlugin.show(
       0,
-      'Test Title',
-      'Test Body',
+      title,
+      body,
       platformChannelSpecifics,
       payload: 'item id 2',
     );

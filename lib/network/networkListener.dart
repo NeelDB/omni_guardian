@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:omni_guardian/rest/mobile_server.dart';
+import 'package:omni_guardian/services/notif_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 import 'dart:async';
@@ -29,20 +30,36 @@ class NetworkListener {
       String? newSSID = await WifiInfo().getWifiName();
       if(newSSID != null && newSSID == _homeWifiSSID) {
         debugPrint("Welcome Home! Don't forget to turn off the alarm!");
+        NotificationService().showNotification(
+            title: "Welcome back!",
+            body: "Don't forget to turn off the alarm!"
+        );
         await MobileServer.startServer();
       }
       else if (newSSID != null && newSSID != _currentWifiSSID) {
         debugPrint('Wi-Fi changed from $_currentWifiSSID to $newSSID');
         debugPrint("Not at home? Don't forget to turn on the alarm!");
+        NotificationService().showNotification(
+            title: "Not at home?",
+            body: "Don't forget to turn on the alarm!"
+        );
         _currentWifiSSID = newSSID;
       }
     } else if(result.first == ConnectivityResult.mobile) {
       debugPrint("Using Mobile Net!");
       debugPrint("Not at home? Don't forget to turn on the alarm!");
+      NotificationService().showNotification(
+          title: "Not at home?",
+          body: "Don't forget to turn on the alarm!"
+      );
       _currentWifiSSID = null;
 
     } else {
       debugPrint("You're now in Offline Mode! Leaving home? Don't forget to turn on the alarm!");
+      NotificationService().showNotification(
+          title: "You're now in Offline Mode",
+          body: "Leaving home? Don't forget to turn on the alarm!"
+      );
       await MobileServer.stopServer();
       _currentWifiSSID = null;
     }

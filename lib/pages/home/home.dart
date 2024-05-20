@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
   final PageController _pageController = PageController();
   Uint8List? bytes;
   String? domainName;
+  bool isAdmin = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,11 @@ class _HomeState extends State<Home> {
         child: Center(
           child: Column(
               children: [
-                Text(domainName ?? "Loading...", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                  Text(
+                    isAdmin ? "Admin - $domainName" :
+                    "Guest - $domainName",
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
 
                 const SizedBox(height: 30),
 
@@ -39,7 +44,7 @@ class _HomeState extends State<Home> {
                 ElevatedButton.icon(
                     onPressed: () {
                       _showCodeInputDialog(context);
-                      },
+                    },
                     icon: isOn? const Icon(Icons.cancel) : const Icon(Icons.power_settings_new, size: 40),
                     label: isOn? const Text('Turn off') : const Text('Turn on'),
                     style: ElevatedButton.styleFrom(
@@ -57,29 +62,30 @@ class _HomeState extends State<Home> {
 
                 const SizedBox(height: 30),
 
+                if(isAdmin)
                 //Add camera
-                ElevatedButton.icon(
-                  onPressed: cameras.length >= 5 ? null : _addCamera,
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add Camera'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo,
-                    foregroundColor: Colors.white,
-                    fixedSize: const Size(300, 40),
-                    //side: const BorderSide(color: Colors.black, width: 2),
-                    shape: const RoundedRectangleBorder(),
-                    textStyle: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ),
+                  ElevatedButton.icon(
+                      onPressed: cameras.length >= 5 || !isAdmin ? null : _addCamera,
+                      icon: const Icon(Icons.add),
+                      label: const Text('Add Camera'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo,
+                        foregroundColor: Colors.white,
+                        fixedSize: const Size(300, 40),
+                        //side: const BorderSide(color: Colors.black, width: 2),
+                        shape: const RoundedRectangleBorder(),
+                        textStyle: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                  ),
 
                 Container(
                   height: 200,
                   width: 300,
                   decoration: const BoxDecoration(
-                    color: Colors.greenAccent
+                      color: Colors.greenAccent
                   ),
                   child: Stack(
                     children: [
@@ -99,27 +105,27 @@ class _HomeState extends State<Home> {
                                   const SizedBox(height: 20),
 
                                   if (index > 0) // Remove button for camera 2, 3, 4, and 5
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: ElevatedButton(
-                                              onPressed: () => _removeCamera(index),
-                                              style: ElevatedButton.styleFrom(
-                                                foregroundColor: Colors.red,
-                                              ),
-                                              child: const Text('Remove Camera'),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ElevatedButton(
+                                            onPressed: () => _removeCamera(index),
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Colors.red,
                                             ),
+                                            child: const Text('Remove Camera'),
                                           ),
+                                        ),
 
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                // Implement take picture functionality
-                                              },
-                                              child: const Text('Take Picture'),
-                                            ),
-                                        ],
-                                      )
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            // Implement take picture functionality
+                                          },
+                                          child: const Text('Take Picture'),
+                                        ),
+                                      ],
+                                    )
                                   else
                                     ElevatedButton(
                                       onPressed: () async {
@@ -160,7 +166,7 @@ class _HomeState extends State<Home> {
                   const SizedBox(height: 25),
                   Image.memory(bytes!),
                   const SizedBox(height: 12),
-              ],
+                ],
           ]),
         ),
       )
@@ -180,16 +186,15 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    getDomainName().then((result) {
-      setState(() {
-        domainName = result;
-      });
-    });
+    getUserDetails();
   }
 
-  Future<String> getDomainName() async {
+  Future<void> getUserDetails() async {
     Map<String, dynamic> user = await Storage.getUser();
-    return user['domain'];
+    setState(() {
+      domainName = user['domain'];
+      isAdmin = user['admin'];
+    });
   }
 
   void _addCamera() {

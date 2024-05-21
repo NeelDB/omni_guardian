@@ -5,6 +5,7 @@ import '../../components/my_button.dart';
 import '../../components/my_halft_textfield.dart';
 import '../../components/my_numberfield.dart';
 import '../../components/my_textfield.dart';
+import '../../network/bluetooth.dart';
 import '../../services/auth_service.dart';
 
 class RegisterEmail extends StatefulWidget {
@@ -28,6 +29,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
   final guestCode = TextEditingController();
   bool isAdmin = false;
   String? selectedRole;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +133,26 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         controller: domainAddress,
                         labelText: 'Domain Address',
                         obscureText: false,
+                      ),
+
+                      const SizedBox(height: 15),
+
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 75,
+                        child: ElevatedButton.icon(
+                            onPressed: () async {await Bluetooth.scanForDevices();},
+                            icon: const Icon(Icons.add_a_photo),
+                            label: _isLoading? const CircularProgressIndicator() : const Text('Add camera'),
+                            style: ElevatedButton.styleFrom(
+                              //side: const BorderSide(color: Colors.black, width: 2),
+                              shape: const RoundedRectangleBorder(),
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                        ),
                       ),
 
                       const SizedBox(height: 15),

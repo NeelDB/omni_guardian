@@ -25,7 +25,6 @@ void main() async {
       )
   );
   await NetworkListener.initListener();
-  //await Bluetooth.scanForDevices();
 
 }
 

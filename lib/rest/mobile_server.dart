@@ -55,6 +55,7 @@ class MobileServer {
         );
       }
       else if(countPassiveAlerts == 3) {
+        //TODO mode active
         print("Looks like you forgot to turned on the alarm, so it's about to become active right now!");
         NotificationService().showNotification(
             title: "Alarm about to activate",
@@ -74,6 +75,7 @@ class MobileServer {
     else {
       Uint8List bytes = base64.decode(alert['imageBytes']);
       print("Received Alert!");
+      //TODO activate countdown and active cancel button
       NotificationService().showNotification(
           title: "Received Alert!",
           body: "Check out the alert"

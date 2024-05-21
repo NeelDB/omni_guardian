@@ -239,6 +239,7 @@ class _HomeState extends State<Home> {
             ElevatedButton(
               onPressed: () async {
                 if(await AuthService(context).codeIsCorrect(codeController.text)) {
+                  //TODO change mode
                   if(isOn) {
                     setState(() {isOn = false;});
                   }

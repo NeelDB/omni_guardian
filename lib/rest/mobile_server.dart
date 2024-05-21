@@ -11,6 +11,9 @@ class MobileServer {
   static const int _serverPort = 3000;
   static const String _alertService = '/processAlert';
   static const String _msgOK = 'Received photo!';
+  static const String _cancelFlag = '[255]';
+  static const String _modeFlag = '[170]';
+  static const String _panicFlag = '[85]';
   static HttpServer? _server;
   static int countPassiveAlerts = 0;
 
@@ -55,7 +58,6 @@ class MobileServer {
         );
       }
       else if(countPassiveAlerts == 3) {
-        //TODO mode active
         print("Looks like you forgot to turned on the alarm, so it's about to become active right now!");
         NotificationService().showNotification(
             title: "Alarm about to activate",
@@ -72,10 +74,33 @@ class MobileServer {
       }
     }
 
+    else if(base64.decode(alert['imageBytes']).toString() == _cancelFlag) {
+      print("Alarm canceled!");
+      NotificationService().showNotification(
+          title: "Alarm canceled!",
+          body: "Don't worry, it was false alarm!"
+      );
+    }
+
+    else if(base64.decode(alert['imageBytes']).toString() == _modeFlag) {
+      print("Alarm Mode changed!");
+      NotificationService().showNotification(
+          title: "Alarm Mode Changed!",
+          body: "Someone has changed the alarm mode!"
+      );
+    }
+
+    else if(base64.decode(alert['imageBytes']).toString() == _panicFlag) {
+      print("Panic Alarm activated!");
+      NotificationService().showNotification(
+          title: "Panic Alarm activated!",
+          body: "Be careful, someone activated the panic alarm!"
+      );
+    }
+
     else {
       Uint8List bytes = base64.decode(alert['imageBytes']);
       print("Received Alert!");
-      //TODO activate countdown and active cancel button
       NotificationService().showNotification(
           title: "Received Alert!",
           body: "Check out the alert"

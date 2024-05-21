@@ -38,8 +38,11 @@ class Requests {
   static const String _cancelAlarmEndpoint = '/cancelAlarm';
   static const String _cancelAlarmURI = _cameraBaseURI + _cancelAlarmEndpoint;
 
-  static const String _createDomainEndpoint = '/createDomain';
-  static const String _createDomainURI = _cameraBaseURI + _createDomainEndpoint;
+  static const String _changeModeEndpoint = '/changeMode';
+  static const String _changeModeURI = _cameraBaseURI + _changeModeEndpoint;
+
+  static const String _activatePanicEndpoint = '/activatePanic';
+  static const String _activatePanicURI = _cameraBaseURI + _activatePanicEndpoint;
 
   static const String _addAdminEndpoint = '/addAdmin';
   static const String _addAdminURI = _serverBaseURI + _addAdminEndpoint;
@@ -145,13 +148,23 @@ class Requests {
     }
   }
 
-  static Future<void> createDomain(String domain) async {
-    final response = await _client.put(Uri.parse("$_createDomainURI/$domain"));
+  static Future<void> changeMode() async {
+    final response = await _client.put(Uri.parse(_changeModeURI));
 
     if (response.statusCode == _ok) {
       debugPrint(response.body);
     }
   }
+
+  static Future<void> activatePanic() async {
+    final response = await _client.put(Uri.parse(_activatePanicURI));
+
+    if (response.statusCode == _ok) {
+      debugPrint(response.body);
+    }
+  }
+
+
 
 
   static Future<String?> listDomains() async {

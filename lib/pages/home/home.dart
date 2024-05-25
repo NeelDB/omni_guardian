@@ -6,6 +6,7 @@ import 'package:omni_guardian/components/my_numberfield.dart';
 import 'package:omni_guardian/services/auth_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:omni_guardian/storage/storage.dart';
+import '../../components/validateCode.dart';
 import '../../rest/requests.dart';
 
 class Home extends StatefulWidget {
@@ -17,12 +18,68 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final codeController = TextEditingController();
-  bool isOn = false;
+  bool isOn = true;
   List<String> cameras = ['Camera 1'];
   final PageController _pageController = PageController();
   Uint8List? bytes;
   String? domainName;
   bool isAdmin = false;
+
+  Future<void> _takePicture() async {
+    String? alertJson = await Requests.addAlert();
+    //String? alertJson = await Requests.getDefaultAlert();
+    Map<String, dynamic> alert = jsonDecode(alertJson!);
+    setState(() {
+      bytes = base64.decode(alert['imageBytes']);
+    });
+    await Storage.updateAlertStorage(alertJson);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
+
+  Future<void> getUserDetails() async {
+    Map<String, dynamic> user = await Storage.getUser();
+    setState(() {
+      domainName = user['domain'];
+      isAdmin = user['admin'];
+    });
+  }
+
+  void _addCamera() {
+    if(cameras.length < 5) {
+      setState(() {
+        int index = cameras.length;
+        cameras.add('Camera ${cameras.length + 1}');
+        _pageController.animateToPage(
+            index,
+            duration: const Duration(microseconds: 400),
+            curve: Curves.bounceInOut
+        );
+      });
+    }
+  }
+
+  void _removeCamera(int index) {
+    if (index > 0 && index < cameras.length) {
+      setState(() {
+        cameras.removeAt(index);
+        _pageController.jumpToPage(index - 1);
+      });
+    }
+  }
+
+  void changeMode() {
+    if(isOn) {
+      setState(() {isOn = false;});
+    }
+    else {setState(() {isOn = true;});
+    }
+    Requests.changeMode();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +102,11 @@ class _HomeState extends State<Home> {
                 //Turn System on/off
                 ElevatedButton.icon(
                     onPressed: () {
-                      _showCodeInputDialog(context);
+                      CodeAlert.validateCode(context, codeController, changeMode);
                     },
-                    icon: isOn? const Icon(Icons.cancel) : const Icon(Icons.power_settings_new, size: 40),
-                    label: isOn? const Text('Turn off') : const Text('Turn on'),
+                    icon: isOn? const Icon(Icons.notifications_paused, size: 40) :
+                      const Icon(Icons.notifications_active),
+                    label: isOn? const Text('Turn to passive') : const Text('Turn to active'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isOn? Colors.red : Colors.green,
                       foregroundColor: Colors.white,
@@ -169,97 +227,6 @@ class _HomeState extends State<Home> {
           ]),
         ),
       )
-    );
-  }
-
-  Future<void> _takePicture() async {
-    String? alertJson = await Requests.addAlert();
-    //String? alertJson = await Requests.getDefaultAlert();
-    Map<String, dynamic> alert = jsonDecode(alertJson!);
-    setState(() {
-      bytes = base64.decode(alert['imageBytes']);
-    });
-    await Storage.updateAlertStorage(alertJson);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getUserDetails();
-  }
-
-  Future<void> getUserDetails() async {
-    Map<String, dynamic> user = await Storage.getUser();
-    setState(() {
-      domainName = user['domain'];
-      isAdmin = user['admin'];
-    });
-  }
-
-  void _addCamera() {
-    if(cameras.length < 5) {
-      setState(() {
-        int index = cameras.length;
-        cameras.add('Camera ${cameras.length + 1}');
-        _pageController.animateToPage(
-            index,
-            duration: const Duration(microseconds: 400),
-            curve: Curves.bounceInOut
-        );
-      });
-    }
-  }
-
-  void _removeCamera(int index) {
-    if (index > 0 && index < cameras.length) {
-      setState(() {
-        cameras.removeAt(index);
-        _pageController.jumpToPage(index - 1);
-      });
-    }
-  }
-  void _showCodeInputDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Enter Code'),
-          content: MyNumberField(
-            labelText: 'Code',
-            controller: codeController,
-            obscureText: true,
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if(await AuthService(context).codeIsCorrect(codeController.text)) {
-                  //TODO change mode
-                  if(isOn) {
-                    setState(() {isOn = false;});
-                  }
-                  else {setState(() {isOn = true;});
-                  }
-                }
-                else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Incorrect code. Please try again.'),
-                  ));
-                }
-                codeController.text = '';
-                Navigator.of(context).pop();
-              },
-              child: const Text('Submit'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

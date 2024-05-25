@@ -4,14 +4,16 @@ import 'package:omni_guardian/components/my_app_bar.dart';
 import 'package:omni_guardian/components/validateCode.dart';
 import '../../rest/requests.dart';
 
+final GlobalKey<AlarmState> alarmKey = GlobalKey<AlarmState>();
+
 class Alarm extends StatefulWidget {
   const Alarm({super.key});
 
   @override
-  State<Alarm> createState() => _AlarmState();
+  State<Alarm> createState() => AlarmState();
 }
 
-class _AlarmState extends State<Alarm> {
+class AlarmState extends State<Alarm> {
   final codeController = TextEditingController();
   bool panicIsOn = false;
   double _progress = 0.0;
@@ -82,7 +84,7 @@ class _AlarmState extends State<Alarm> {
 
               const SizedBox(height: 40),
 
-              if(_progress <= 1.0)
+              if(_progress > 0 && _progress <= 1.0)
                 //Cancel
                 ElevatedButton.icon(
                     onPressed: () {

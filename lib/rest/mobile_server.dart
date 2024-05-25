@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:omni_guardian/pages/alarm/alarm.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:omni_guardian/storage/storage.dart';
@@ -99,6 +100,7 @@ class MobileServer {
     }
 
     else {
+      alarmKey.currentState?.startTimer();
       Uint8List bytes = base64.decode(alert['imageBytes']);
       print("Received Alert!");
       NotificationService().showNotification(

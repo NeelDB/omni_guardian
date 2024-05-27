@@ -41,12 +41,7 @@ class AlarmState extends State<Alarm> {
   }
 
   Future<void> activatePanic() async {
-    if(panicIsOn) {
-      setState(() {panicIsOn = false;});
-    }
-    else {
-      setState(() {panicIsOn = true;});
-    }
+    setState(() {panicIsOn = true;});
     await Requests.activatePanic();
   }
 

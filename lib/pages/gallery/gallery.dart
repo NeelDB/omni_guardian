@@ -6,8 +6,6 @@ import 'package:omni_guardian/pages/gallery/modal.dart';
 import 'package:omni_guardian/rest/requests.dart';
 import 'package:omni_guardian/storage/storage.dart';
 
-import '../../data/alert.dart';
-
 class Gallery extends StatefulWidget {
   const Gallery({super.key});
 

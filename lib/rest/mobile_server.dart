@@ -87,6 +87,7 @@ class MobileServer {
     }
 
     else if(base64.decode(alert['imageBytes']).toString() == _modeFlag) {
+      homeKey.currentState?.changeMode();
       print("Alarm Mode changed!");
       NotificationService().showNotification(
           title: "Alarm Mode Changed!",
@@ -95,6 +96,7 @@ class MobileServer {
     }
 
     else if(base64.decode(alert['imageBytes']).toString() == _panicFlag) {
+      alarmKey.currentState?.activatePanic();
       print("Panic Alarm activated!");
       NotificationService().showNotification(
           title: "Panic Alarm activated!",

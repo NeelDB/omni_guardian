@@ -33,12 +33,16 @@ class AlarmState extends State<Alarm> {
   }
 
   Future<void> cancelAlarm() async {
+    canceledAlarm();
+    await Requests.cancelAlarm();
+  }
+
+  void canceledAlarm() {
     _timer.cancel();
     setState(() {
       _progress = 0;
     });
-    await Requests.cancelAlarm();
-  }
+}
 
   Future<void> activatePanic() async {
     setState(() {panicIsOn = true;});

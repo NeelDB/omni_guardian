@@ -84,6 +84,8 @@ class MobileServer {
           body: "Don't worry, it was false alarm!"
       );
       alarmKey.currentState?.deactivatePanic();
+      alarmKey.currentState?.canceledAlarm();
+
     }
 
     else if(base64.decode(alert['imageBytes']).toString() == _modeFlag) {

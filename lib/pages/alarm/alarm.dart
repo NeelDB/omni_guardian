@@ -50,6 +50,14 @@ class AlarmState extends State<Alarm> {
     await Requests.activatePanic();
   }
 
+  void deactivatePanic() {
+    if(panicIsOn) {
+      setState(() {
+        panicIsOn = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

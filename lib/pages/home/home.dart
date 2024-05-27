@@ -9,14 +9,16 @@ import 'package:omni_guardian/storage/storage.dart';
 import '../../components/validateCode.dart';
 import '../../rest/requests.dart';
 
+final GlobalKey<HomeState> homeKey = GlobalKey<HomeState>();
+
 class Home extends StatefulWidget {
-  Home({super.key});
+  const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home> createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   final codeController = TextEditingController();
   bool isOn = true;
   List<String> cameras = ['Camera 1'];

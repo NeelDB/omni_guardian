@@ -1,10 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:omni_guardian/pages/alarm/alarm.dart';
 import 'package:omni_guardian/rest/mobile_server.dart';
 import 'package:omni_guardian/services/notif_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 import 'dart:async';
+
+import '../pages/home/home.dart';
 
 class NetworkListener {
   static final Connectivity _connectivity = Connectivity();
@@ -53,7 +56,6 @@ class NetworkListener {
           body: "Don't forget to turn on the alarm!"
       );
       _currentWifiSSID = null;
-
     } else {
       debugPrint("You're now in Offline Mode! Leaving home? Don't forget to turn on the alarm!");
       NotificationService().showNotification(

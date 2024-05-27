@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:omni_guardian/pages/alarm/alarm.dart';
+import 'package:omni_guardian/pages/home/home.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:omni_guardian/storage/storage.dart';
@@ -64,6 +65,7 @@ class MobileServer {
             title: "Alarm about to activate",
             body: "Looks like you forgot to turned on the alarm, so it's about to become active right now!"
         );
+        homeKey.currentState?.changeMode();
         countPassiveAlerts = 0;
       }
       else {
@@ -81,6 +83,7 @@ class MobileServer {
           title: "Alarm canceled!",
           body: "Don't worry, it was false alarm!"
       );
+      alarmKey.currentState?.deactivatePanic();
     }
 
     else if(base64.decode(alert['imageBytes']).toString() == _modeFlag) {
@@ -107,6 +110,7 @@ class MobileServer {
           title: "Received Alert!",
           body: "Check out the alert"
       );
+      alarmKey.currentState?.startTimer();
       print("Received PIR timestamp: ${alert['timestamp']}");
       print("Received PIR bytes: $bytes");
       await Storage.updateAlertStorage(alertJson);

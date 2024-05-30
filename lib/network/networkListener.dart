@@ -49,6 +49,7 @@ class NetworkListener {
         _currentWifiSSID = newSSID;
       }
     } else if(result.first == ConnectivityResult.mobile) {
+      await MobileServer.startServer();
       debugPrint("Using Mobile Net!");
       debugPrint("Not at home? Don't forget to turn on the alarm!");
       NotificationService().showNotification(

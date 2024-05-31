@@ -114,7 +114,6 @@ class MobileServer {
           title: "Received Alert!",
           body: "Check out the alert"
       );
-      alarmKey.currentState?.startTimer();
       print("Received PIR timestamp: ${alert['timestamp']}");
       print("Received PIR bytes: $bytes");
       await Storage.updateAlertStorage(alertJson);

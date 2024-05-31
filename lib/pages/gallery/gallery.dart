@@ -17,6 +17,7 @@ class _GalleryState extends State<Gallery> {
 
   List<Data> images = [];
   String? selectedFilter = 'ALL';
+  bool isOffline = false;
 
   Future<void> getLastAlert() async {
     Map<String, dynamic> alert = await Storage.getAlert();
@@ -40,15 +41,37 @@ class _GalleryState extends State<Gallery> {
     });
 
     if(query == "ALL") {
-      alerts = await Requests.getAlerts(user['email'], user['authorizationToken']);
+      try {
+        alerts = await Requests.getAlerts(user['email'], user['authorizationToken']);
+        isOffline = false;
+      }
+      catch (e) {
+        isOffline = true;
+        return;
+      }
     }
     else if(query == "POSITIVE") {
-      alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
+      try {
+        alerts = await Requests.getPositiveAlerts(user['email'], user['authorizationToken']);
+        isOffline = false;
+      }
+      catch (e) {
+        isOffline = true;
+        return;
+      }
     }
     else if(query == "FALSE") {
-      alerts = await Requests.getFalseAlerts(user['email'], user['authorizationToken']);
+      try {
+        alerts = await Requests.getFalseAlerts(user['email'], user['authorizationToken']);
+        isOffline = false;
+      }
+      catch (e) {
+        isOffline = true;
+        return;
+      }
     }
     else if(query == "LAST") {
+      isOffline = false;
       return await getLastAlert();
     }
 
@@ -92,6 +115,15 @@ class _GalleryState extends State<Gallery> {
             ),
           ),
 
+          isOffline?
+          const Expanded(
+            child: Center(
+              child: Text(
+                'No internet connection detected',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ),
+          )     :
           images.isEmpty?
           const Expanded(
             child: Center(

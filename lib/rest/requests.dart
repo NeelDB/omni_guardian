@@ -136,6 +136,9 @@ class Requests {
       debugPrint(response.body);
       return response.body;
     }
+    else {
+      throw Exception('Offline');
+    }
 
     return null;
   }
@@ -146,6 +149,9 @@ class Requests {
     if (response.statusCode == _ok) {
       debugPrint(response.body);
     }
+    else {
+      throw Exception('Offline');
+    }
   }
 
   static Future<void> changeMode() async {
@@ -154,6 +160,9 @@ class Requests {
     if (response.statusCode == _ok) {
       debugPrint(response.body);
     }
+    else {
+      throw Exception('Offline');
+    }
   }
 
   static Future<void> activatePanic() async {
@@ -161,6 +170,9 @@ class Requests {
 
     if (response.statusCode == _ok) {
       debugPrint(response.body);
+    }
+    else {
+      throw Exception('Offline');
     }
   }
 
@@ -257,6 +269,9 @@ class Requests {
     } else if (response.statusCode == _forbidden) {
       debugPrint("Incorrect token!");
     }
+    else {
+      throw Exception("Offline");
+    }
 
     return null;
   }
@@ -271,6 +286,9 @@ class Requests {
     } else if (response.statusCode == _forbidden) {
       debugPrint("Incorrect token!");
     }
+    else {
+      throw Exception("Offline");
+    }
 
     return null;
   }
@@ -284,6 +302,9 @@ class Requests {
       return response.body;
     } else if (response.statusCode == _forbidden) {
       debugPrint("Incorrect token!");
+    }
+    else {
+      throw Exception("Offline");
     }
 
     return null;

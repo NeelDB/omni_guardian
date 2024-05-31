@@ -25,20 +25,49 @@ class HomeState extends State<Home> {
   String? domainName;
   bool isAdmin = false;
 
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
+
+  void offlineErrorMessage() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error - Offline"),
+          content: const Text("No internet connection detected"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _takePicture() async {
-    String? alertJson = await Requests.addAlert();
+    String? alertJson;
+
+    try {
+      alertJson = await Requests.addAlert();
+    }
+    catch (e) {
+      offlineErrorMessage();
+      return;
+    }
+
     //String? alertJson = await Requests.getDefaultAlert();
     Map<String, dynamic> alert = jsonDecode(alertJson!);
     setState(() {
       bytes = base64.decode(alert['imageBytes']);
     });
     await Storage.updateAlertStorage(alertJson);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getUserDetails();
   }
 
   Future<void> getUserDetails() async {
@@ -82,8 +111,15 @@ class HomeState extends State<Home> {
   }
 
   //When user toggles mode on the app. Sends request to inform ESP
-  void changeMode() {
-    Requests.changeMode();
+  Future<void> changeMode() async {
+    try {
+      await Requests.changeMode();
+    }
+    catch (e) {
+      offlineErrorMessage();
+      return;
+    }
+
   }
 
   @override

@@ -19,6 +19,26 @@ class AlarmState extends State<Alarm> {
   double _progress = 0.0;
   late Timer _timer;
 
+  void offlineErrorMessage() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error - Offline"),
+          content: const Text("No internet connection detected"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void startTimer() {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(oneSec, (Timer timer) {
@@ -33,8 +53,12 @@ class AlarmState extends State<Alarm> {
   }
 
   Future<void> cancelAlarm() async {
-    //canceledAlarm();
-    await Requests.cancelAlarm();
+    try {
+      await Requests.cancelAlarm();
+    }
+    catch (e) {
+      offlineErrorMessage();
+    }
   }
 
   void canceledAlarm() {
@@ -46,10 +70,17 @@ class AlarmState extends State<Alarm> {
 
   Future<void> activatePanic() async {
     if(panicIsOn == false) {
+      try {
+        await Requests.activatePanic();
+      }
+      catch (e) {
+        offlineErrorMessage();
+        return;
+      }
+
       setState(() {
         panicIsOn = true;
       });
-      await Requests.activatePanic();
     }
   }
 

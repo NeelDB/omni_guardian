@@ -33,7 +33,7 @@ class AlarmState extends State<Alarm> {
   }
 
   Future<void> cancelAlarm() async {
-    canceledAlarm();
+    //canceledAlarm();
     await Requests.cancelAlarm();
   }
 
@@ -45,8 +45,12 @@ class AlarmState extends State<Alarm> {
 }
 
   Future<void> activatePanic() async {
-    setState(() {panicIsOn = true;});
-    await Requests.activatePanic();
+    if(panicIsOn == false) {
+      setState(() {
+        panicIsOn = true;
+      });
+      await Requests.activatePanic();
+    }
   }
 
   void deactivatePanic() {

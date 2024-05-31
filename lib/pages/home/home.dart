@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:omni_guardian/components/my_app_bar.dart';
-import 'package:omni_guardian/components/my_numberfield.dart';
-import 'package:omni_guardian/services/auth_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:omni_guardian/storage/storage.dart';
 import '../../components/validateCode.dart';
@@ -74,12 +72,17 @@ class HomeState extends State<Home> {
     }
   }
 
-  void changeMode() {
+  //Used when "Mode changed" notification is received
+  void modeChanged() {
     if(isOn) {
       setState(() {isOn = false;});
     }
     else {setState(() {isOn = true;});
     }
+  }
+
+  //When user toggles mode on the app. Sends request to inform ESP
+  void changeMode() {
     Requests.changeMode();
   }
 
